@@ -12,5 +12,4 @@ class ServerBrowser(HtmlElement):
         self._attr_names += [
             "dark",
         ]
-        self.event_names = [
-        ]
+        self.event_names = []

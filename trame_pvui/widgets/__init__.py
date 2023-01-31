@@ -3,7 +3,6 @@ from .filebrowser import FileBrowser  # noqa
 from .serverbrowser import ServerBrowser  # noqa
 
 __all__ = [
-    'Colormapper'
-    'FileBrowser',
-    'ServerBrowser',
+    "Colormapper" "FileBrowser",
+    "ServerBrowser",
 ]
