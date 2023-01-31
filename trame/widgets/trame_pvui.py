@@ -1,4 +1,4 @@
-from trame_pvui.widgets.trame_pvui import *
+from trame_pvui.widgets import *
 
 
 def initialize(server):
