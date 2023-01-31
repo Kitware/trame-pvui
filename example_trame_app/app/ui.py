@@ -10,6 +10,9 @@ server = get_server()
 state, ctrl = server.state, server.controller
 
 
+# @zach add a tab here
+
+
 def initialize(server):
     ctrl = server.controller
 

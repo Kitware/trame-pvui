@@ -76,6 +76,9 @@ class FileBrowserEngine:
             state.current_remote_dir_contents = get_dir_contents(current_remote_dir)
 
 
+# @zach initialize engine here
+
+
 class WidgetTesterEngine:
     def initialize(self, server):
         ColorMapperEngine().initialize(server)
