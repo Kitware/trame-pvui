@@ -47,6 +47,7 @@ export default {
       unsyncedCurrentTab: 'local',
       filename: undefined,
       filetype: this.fileTypes[0]?.value,
+      currentSelected: [],
     };
   },
   methods: {
@@ -62,6 +63,9 @@ export default {
       } else {
         this.$emit('setRemoteDir', dirName);
       }
+    },
+    setCurrentSelected(selected) {
+      this.currentSelected = selected;
     },
   },
 };
@@ -109,6 +113,7 @@ export default {
             <v-tab-item>
               <file-browser
                 @setCurrentDir="setCurrentDir"
+                @setCurrentSelected="setCurrentSelected"
                 @setFileName="(name) => (this.filename = name)"
                 locationType="Local"
                 :small="syncCurrentLocalAndRemote"
@@ -120,6 +125,7 @@ export default {
             <v-tab-item>
               <file-browser
                 @setCurrentDir="setCurrentDir"
+                @setCurrentSelected="setCurrentSelected"
                 @setFileName="(name) => (this.filename = name)"
                 locationType="Remote"
                 :small="syncCurrentLocalAndRemote"
@@ -137,6 +143,7 @@ export default {
             </v-tabs>
             <file-browser
               @setCurrentDir="setCurrentDir"
+              @setCurrentSelected="setCurrentSelected"
               @setFileName="(name) => (this.filename = name)"
               locationType="Local"
               :small="syncCurrentLocalAndRemote"
@@ -151,6 +158,7 @@ export default {
             </v-tabs>
             <file-browser
               @setCurrentDir="setCurrentDir"
+              @setCurrentSelected="setCurrentSelected"
               @setFileName="(name) => (this.filename = name)"
               locationType="Remote"
               :small="syncCurrentLocalAndRemote"
@@ -161,16 +169,23 @@ export default {
           </div>
         </div>
         <div class="pa-3 container">
-          <v-text-field
-            v-model="filename"
-            autofocus
-            placeholder="File name"
-            :disabled="mode !== 'Save'"
-          />
-          <v-btn v-if="mode !== 'Save'" :disabled="!filename" @click="submit">
-            {{ mode }}
+          <v-btn
+            v-if="mode === 'Open'"
+            :disabled="currentSelected.length < 1"
+            @click="submit"
+          >
+            {{
+              currentSelected.length > 1
+                ? 'Open multiple as time series'
+                : 'Open'
+            }}
           </v-btn>
           <div v-if="mode === 'Save'" class="container">
+            <v-text-field
+              v-model="filename"
+              autofocus
+              placeholder="File name"
+            />
             <v-select
               v-model="filetype"
               :items="fileTypes"

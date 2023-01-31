@@ -32,11 +32,47 @@ export default {
       }
     },
     selectItem(selected) {
-      if (selected.length === 1 && selected[0].type !== 'folder') {
-        this.$emit('setFileName', selected[0].name);
+      if (
+        this.selectedItems.length === 0 &&
+        selected.value &&
+        !['folder', 'group'].includes(selected.item.type)
+      ) {
+        this.$emit('setFileName', selected.item.name);
       } else {
         this.$emit('setFileName', undefined);
       }
+      if (selected.item.type === 'group') {
+        if (selected.value) {
+          this.selectedItems = [...this.selectedItems, ...selected.item.files];
+        } else {
+          this.selectedItems = this.selectedItems.filter(
+            (i) => !selected.item.files.includes(i)
+          );
+        }
+      }
+      if (selected.value) {
+        this.selectedItems.push(selected.item);
+      } else {
+        this.selectedItems = this.selectedItems.filter(
+          (i) => i !== selected.item
+        );
+      }
+      this.dirContents.forEach((item) => {
+        if (item.type === 'group') {
+          if (item.files?.every((i) => this.selectedItems.includes(i))) {
+            this.selectedItems = [...this.selectedItems, item];
+          } else {
+            this.selectedItems = this.selectedItems.filter(
+              (i) => i.name !== item.name
+            );
+          }
+        }
+      });
+      this.selectedItems = this.selectedItems.filter((value, index, self) => {
+        // no duplicates
+        return self.indexOf(value) === index;
+      });
+      this.$emit('setCurrentSelected', this.selectedItems);
     },
     openItem(e, { item }) {
       if (item?.type === 'folder') {
@@ -49,6 +85,13 @@ export default {
         } else {
           console.error(folderLocation, 'not found');
         }
+      }
+    },
+    expandGroup(group) {
+      if (this.expandedGroup === group.name) {
+        this.expandedGroup = undefined;
+      } else {
+        this.expandedGroup = group.name;
       }
     },
     goBack() {
@@ -86,6 +129,20 @@ export default {
       });
       return headers;
     },
+    tableItems() {
+      const tableItems = this.dirContents.map((item) => {
+        if (item.type === 'group' && item.name === this.expandedGroup) {
+          return [
+            item,
+            ...item.files.map((file) =>
+              Object.assign(file, { class: 'group-items' })
+            ),
+          ];
+        }
+        return item;
+      });
+      return tableItems.flat();
+    },
   },
   data() {
     const availableHeaders = [
@@ -107,6 +164,7 @@ export default {
       showColumnPicker: false,
       filterString: undefined,
       selectedItems: [],
+      expandedGroup: undefined,
       availableHeaders,
       columnsShown,
     };
@@ -196,11 +254,12 @@ export default {
         hide-default-footer
         fixed-header
         v-model="selectedItems"
-        :items="dirContents"
+        :items="tableItems"
         item-key="name"
+        item-class="class"
         :headers="headers"
         :search="filterString"
-        @input="selectItem"
+        @item-selected="selectItem"
         @dblclick:row="openItem"
       >
         <template v-slot:[`header.add_column`]="{}">
@@ -209,7 +268,10 @@ export default {
           </v-btn>
         </template>
         <template v-slot:[`item.name`]="{ item }">
-          <v-icon>{{ getIcon(item.type) }}</v-icon>
+          <v-icon v-if="item.type === 'group'" @click="() => expandGroup(item)">
+            {{ expandedGroup === item.name ? 'mdi-menu-up' : 'mdi-menu-down' }}
+          </v-icon>
+          <v-icon v-else>{{ getIcon(item.type) }}</v-icon>
           {{ item.name }}
         </template>
       </v-data-table>
@@ -278,6 +340,9 @@ export default {
   top: 10px;
   width: 300px;
   position: absolute;
+}
+.group-items {
+  background-color: gray;
 }
 </style>
 

@@ -64,6 +64,36 @@ export default {
           modified: '10/29/22 4:00pm',
           owner: 'root',
         },
+        {
+          name: 'Group set',
+          type: 'group',
+          size: '--',
+          modified: '--',
+          owner: 'temp',
+          files: [
+            {
+              name: 'Group file A',
+              type: 'file',
+              size: '2MB',
+              modified: '11/01/22 8:00am',
+              owner: 'temp',
+            },
+            {
+              name: 'Group file B',
+              type: 'file',
+              size: '2MB',
+              modified: '11/01/22 8:00am',
+              owner: 'temp',
+            },
+            {
+              name: 'Group file C',
+              type: 'file',
+              size: '2MB',
+              modified: '11/01/22 8:00am',
+              owner: 'temp',
+            },
+          ],
+        },
       ];
       return possibleFiles.filter(() => Math.random() < 0.5);
     },
