@@ -12,16 +12,14 @@ Features
 --------
 This package includes the following widgets:
 
-```
-Colormapper,
-FileBrowser,
-ServerBrowser,
-```
+ - Colormapper
+ - FileBrowser
+ - ServerBrowser
 
 
 Installing
 ----------
-Build and install the Vue components
+Build and install the Vue components:
 
 .. code-block:: console
 
@@ -30,7 +28,7 @@ Build and install the Vue components
     npm run build
     cd -
 
-Install the application
+Install the application for use in a trame app:
 
 .. code-block:: console
 
