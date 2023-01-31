@@ -1,11 +1,22 @@
 ==========
-Trame Pvui
+Trame Paraview UI widgets
 ==========
 
 Trame widgets which may be used in the Paraview user interface (Pvui)
 
 
 * Free software: Apache Software License
+
+
+Features
+--------
+This package includes the following widgets:
+
+```
+Colormapper,
+FileBrowser,
+ServerBrowser,
+```
 
 
 Installing
@@ -26,8 +37,6 @@ Install the application
     pip install -e .
 
 
-
-Features
+Contributing
 --------
-
-* TODO
+see `CONTRIBUTING.rst`

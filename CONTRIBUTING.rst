@@ -9,6 +9,24 @@ Contributing to Trame Pvui
 #. Create a fork of the repository on GitHub
 #. Push your branch to your fork, and open a pull request
 
+
+Getting started
+###
+Run the development server
+
+.. code-block:: console
+
+    cd vue-components
+    npm run serve:[widget_name]
+
+Where `widget_name` is one of [`colormapper`, `filebrowser`, `serverbrowser`].
+To add a new option for `widget_name`, add a vue app file in `vue-components/src/tests`.
+
+Make changes within `vue-components/src/components/`.
+For every widget in this folder, there should be a python file in `trame_pvui/widgets`.
+Follow the same structure as other files in those locations.
+
+
 Tips
 ####
 
