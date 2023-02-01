@@ -28,7 +28,7 @@ class Colormapper(HtmlElement):
 
     def __init__(self, **kwargs):
         super().__init__(
-            "colormap-editor",
+            "colormapper",
             **kwargs,
         )
         self._attr_names += [

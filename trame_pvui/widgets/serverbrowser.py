@@ -8,6 +8,7 @@ from .widget import HtmlElement
 class ServerBrowser(HtmlElement):
     def __init__(self, **kwargs):
         super().__init__(
+            "server-browser",
             **kwargs,
         )
         self._attr_names += [

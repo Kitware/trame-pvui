@@ -3,8 +3,8 @@ from trame.widgets import vuetify
 from trame.widgets import vtk
 from trame.app import get_server
 
-from colormapper.widget import ColormapEditor
-from filebrowser.widget import FileBrowser
+from trame_pvui.widgets.colormapper import Colormapper
+from trame_pvui.widgets.filebrowser import FileBrowser
 
 server = get_server()
 state, ctrl = server.state, server.controller
@@ -36,7 +36,7 @@ def initialize(server):
                     vuetify.VTab(children=["File browser"])
                 with vuetify.VTabsItems(v_model=("tab", 0)):
                     with vuetify.VTabItem():
-                        ColormapEditor(
+                        Colormapper(
                             histogram_data=("histogram_data",),
                             colors=("colormap_points",),
                             opacities=("opacity_points",),

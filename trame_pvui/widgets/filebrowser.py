@@ -58,7 +58,7 @@ class FileBrowser(HtmlElement):
 
     def __init__(self, **kwargs):
         super().__init__(
-            "file-dialog",
+            "file-browser",
             **kwargs,
         )
         self._attr_names += [
