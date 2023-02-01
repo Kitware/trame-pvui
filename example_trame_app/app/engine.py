@@ -8,10 +8,15 @@ from .filebrowser_functions import (
     save_file,
     open_file,
 )
+from .serverbrowser_functions import (
+    add_server,
+    update_server,
+)
 from .default_states import (
     DEFAULT_COLOR_MAP,
     DEFAULT_OPACITY_MAP,
     DEFAULT_FILEBROWSER_STATE,
+    DEFAULT_SERVER_LIST,
 )
 
 logger = logging.getLogger(__name__)
@@ -76,13 +81,19 @@ class FileBrowserEngine:
             state.current_remote_dir_contents = get_dir_contents(current_remote_dir)
 
 
-# @zach initialize engine here
+class ServerBrowserEngine:
+    def initialize(self, server):
+        state, ctrl = server.state, server.controller
+        state.servers = DEFAULT_SERVER_LIST
+        ctrl.add_server = add_server
+        ctrl.update_server = update_server
 
 
 class WidgetTesterEngine:
     def initialize(self, server):
         ColorMapperEngine().initialize(server)
         FileBrowserEngine().initialize(server)
+        ServerBrowserEngine().initialize(server)
 
 
 def initialize(server):

@@ -5,12 +5,10 @@ from trame.app import get_server
 
 from trame_pvui.widgets.colormapper import Colormapper
 from trame_pvui.widgets.filebrowser import FileBrowser
+from trame_pvui.widgets.serverbrowser import ServerBrowser
 
 server = get_server()
 state, ctrl = server.state, server.controller
-
-
-# @zach add a tab here
 
 
 def initialize(server):
@@ -34,6 +32,7 @@ def initialize(server):
                 with vuetify.VTabs(grow=True, v_model=("tab", 0)):
                     vuetify.VTab(children=["Color mapper"])
                     vuetify.VTab(children=["File browser"])
+                    vuetify.VTab(children=["Server browser"])
                 with vuetify.VTabsItems(v_model=("tab", 0)):
                     with vuetify.VTabItem():
                         Colormapper(
@@ -72,6 +71,12 @@ def initialize(server):
                             set_remote_dir="current_remote_dir = $event",
                             mode="Open",
                             submit=ctrl.open_file,
+                        )
+                    with vuetify.VTabItem():
+                        ServerBrowser(
+                            servers=("servers",),
+                            add=ctrl.add_server,
+                            update=ctrl.update_server,
                         )
 
         # Main content

@@ -1,15 +1,12 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { ServerBrowser } from '../../components';
+import ServerBrowser from '../../components/serverbrowser/ServerBrowser.vue';
 import { Server } from '../../components/serverbrowser/schema';
 
 export default defineComponent({
   name: 'HomePage',
   components: { ServerBrowser },
   setup() {
-    // @zach: replaced reactive with ref due to the following warning:
-    // [Vue warn]: Avoid using Array as root value for reactive()
-    // as it cannot be tracked in watch() or watchEffect(). Use ref() instead. This is a Vue-2-only limitation.
     const servers = ref<Server[]>([]);
 
     function addServer(server: Server) {

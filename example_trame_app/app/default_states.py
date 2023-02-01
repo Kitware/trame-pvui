@@ -32,3 +32,5 @@ DEFAULT_FILEBROWSER_STATE = {
         "remote_host:/root/data/Three",
     ],
 }
+
+DEFAULT_SERVER_LIST = []
