@@ -1,5 +1,6 @@
 <script lang="ts">
-import { FileBrowser } from '../../components';
+import components from '../../components';
+const { FileBrowser } = components;
 
 export default {
   name: 'HomePage',

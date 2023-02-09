@@ -1,5 +1,6 @@
 <script lang="ts">
-import { Colormapper } from '../../components';
+import components from '../../components';
+const { Colormapper } = components;
 
 export default {
   name: 'HomePage',

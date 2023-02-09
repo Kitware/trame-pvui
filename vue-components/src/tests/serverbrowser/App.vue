@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import ServerBrowser from '../../components/serverbrowser/ServerBrowser.vue';
+import components from '../../components';
 import { Server } from '../../components/serverbrowser/schema';
+const { ServerBrowser } = components;
 
 export default defineComponent({
   name: 'HomePage',

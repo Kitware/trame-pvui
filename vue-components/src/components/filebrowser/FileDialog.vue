@@ -1,7 +1,7 @@
 <script lang="ts">
-import FileBrowser from './FileBrowser.vue';
+import DirBrowser from './DirBrowser.vue';
 export default {
-  components: { FileBrowser },
+  components: { DirBrowser },
   props: {
     mode: {
       type: String,
@@ -111,7 +111,7 @@ export default {
           </v-tabs>
           <v-tabs-items v-model="unsyncedCurrentTab">
             <v-tab-item>
-              <file-browser
+              <dir-browser
                 @setCurrentDir="setCurrentDir"
                 @setCurrentSelected="setCurrentSelected"
                 @setFileName="(name) => (this.filename = name)"
@@ -123,7 +123,7 @@ export default {
               />
             </v-tab-item>
             <v-tab-item>
-              <file-browser
+              <dir-browser
                 @setCurrentDir="setCurrentDir"
                 @setCurrentSelected="setCurrentSelected"
                 @setFileName="(name) => (this.filename = name)"
