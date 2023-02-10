@@ -3,6 +3,7 @@ from pathlib import Path
 import logging
 
 from .filebrowser_functions import (
+    get_initial_state,
     get_applicable_file_types,
     get_dir_contents,
     save_file,
@@ -15,7 +16,6 @@ from .serverbrowser_functions import (
 from .default_states import (
     DEFAULT_COLOR_MAP,
     DEFAULT_OPACITY_MAP,
-    DEFAULT_FILEBROWSER_STATE,
     DEFAULT_SERVER_LIST,
 )
 
@@ -64,10 +64,10 @@ class ColorMapperEngine(VtkPipelineEngine):
 class FileBrowserEngine:
     def initialize(self, server):
         state, ctrl = server.state, server.controller
-        for key, value in DEFAULT_FILEBROWSER_STATE.items():
+        initial_state = get_initial_state()
+        print(initial_state)
+        for key, value in initial_state.items():
             setattr(state, key, value)
-        state.current_local_dir_contents = get_dir_contents(state.current_local_dir)
-        state.current_remote_dir_contents = get_dir_contents(state.current_remote_dir)
         state.file_types = get_applicable_file_types()
         ctrl.save_file = save_file
         ctrl.open_file = open_file

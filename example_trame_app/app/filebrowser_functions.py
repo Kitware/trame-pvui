@@ -1,71 +1,55 @@
-import random
+from pathlib import Path
+from datetime import datetime
+from pwd import getpwuid
 
 
-def get_random_dir_contents():
-    possible_files = [
-        {
-            "name": "example1",
-            "type": "file",
-            "size": "10KB",
-            "modified": "10/30/22 12:23pm",
-            "owner": "root",
-        },
-        {
-            "name": "example2",
-            "type": "file",
-            "size": "20KB",
-            "modified": "10/30/22 2:00pm",
-            "owner": "root",
-        },
-        {
-            "name": "example3",
-            "type": "file",
-            "size": "30KB",
-            "modified": "10/30/22 3:00pm",
-            "owner": "root",
-        },
-        {
-            "name": "a big file",
-            "type": "file",
-            "size": "10MB",
-            "modified": "10/31/22 10:00pm",
-            "owner": "root",
-        },
-        {
-            "name": "foo",
-            "type": "file",
-            "size": "1MB",
-            "modified": "10/29/22 4:00pm",
-            "owner": "root",
-        },
-        {
-            "name": "bar",
-            "type": "file",
-            "size": "1MB",
-            "modified": "10/29/22 4:00pm",
-            "owner": "root",
-        },
-        {
-            "name": "One",
-            "type": "folder",
-            "size": "--",
-            "modified": "10/29/22 4:00pm",
-            "owner": "root",
-        },
-        {
-            "name": "Two",
-            "type": "folder",
-            "size": "--",
-            "modified": "10/29/22 4:00pm",
-            "owner": "root",
-        },
-    ]
-    return random.sample(possible_files, k=5)
+local_root_dir = Path(".").absolute()
+
+
+def get_file_size_string(num_bytes):
+    size_units = ["GB", "MB", "kB", "bytes"]
+    for i, suffix in enumerate(size_units):
+        exponent = len(size_units) - 1 - i
+        divisor = 1024**exponent
+        if num_bytes > divisor:
+            return f"{num_bytes / divisor} {suffix}"
+
+
+def get_dir_tree_as_list(root_dir):
+    return [str(p) for p in Path(root_dir).rglob("*") if p.is_dir()]
 
 
 def get_dir_contents(dir_name):
-    print("get items in", dir_name)
-    return get_random_dir_contents()
+    ret = []
+    for p in Path(dir_name).glob("*"):
+        stats = p.stat()
+        filename = str(p).split("/")[-1]
+        filetype = "folder" if p.is_dir() else f'{filename.split(".")[-1].upper()} file'
+        size = get_file_size_string(stats.st_size)
+        modified = datetime.fromtimestamp(stats.st_mtime).strftime("%m/%d/%Y, %H:%M:%S")
+        owner = getpwuid(stats.st_uid).pw_name
+
+        ret += [
+            {
+                "name": filename,
+                "type": filetype,
+                "size": size,
+                "modified": modified,
+                "owner": owner,
+            }
+        ]
+    return ret
+
+
+def get_initial_state():
+    return {
+        "local_directories": get_dir_tree_as_list(local_root_dir),
+        "remote_directories": ["remote_host:/root"],
+        "current_local_dir_contents": get_dir_contents(local_root_dir),
+        "current_remote_dir_contents": [],
+        "current_local_dir": str(local_root_dir),
+        "current_remote_dir": "remote_host:/root",
+    }
 
 
 def get_applicable_file_types():
