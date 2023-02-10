@@ -65,7 +65,6 @@ class FileBrowserEngine:
     def initialize(self, server):
         state, ctrl = server.state, server.controller
         initial_state = get_initial_state()
-        print(initial_state)
         for key, value in initial_state.items():
             setattr(state, key, value)
         state.file_types = get_applicable_file_types()
