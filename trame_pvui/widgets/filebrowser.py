@@ -72,7 +72,7 @@ class FileBrowser(HtmlElement):
             ("current_local_dir_contents", "currentLocalDirContents"),
             ("current_remote_dir_contents", "currentRemoteDirContents"),
         ]
-        self.event_names = [
+        self._event_names += [
             ("set_local_dir", "setLocalDir"),
             ("set_remote_dir", "setRemoteDir"),
             "submit",
