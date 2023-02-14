@@ -253,6 +253,7 @@ export default {
         show-select
         hide-default-footer
         fixed-header
+        id="virtual-scroll-table"
         v-model="selectedItems"
         :items="tableItems"
         item-key="name"
@@ -350,5 +351,9 @@ export default {
 .v-overlay__content {
   width: 100%;
   height: 100%;
+}
+#virtual-scroll-table {
+  max-height: 400px;
+  overflow: auto;
 }
 </style>

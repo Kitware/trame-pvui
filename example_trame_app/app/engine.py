@@ -3,6 +3,7 @@ from pathlib import Path
 import logging
 
 from .filebrowser_functions import (
+    get_initial_state,
     get_applicable_file_types,
     get_dir_contents,
     save_file,
@@ -15,7 +16,6 @@ from .serverbrowser_functions import (
 from .default_states import (
     DEFAULT_COLOR_MAP,
     DEFAULT_OPACITY_MAP,
-    DEFAULT_FILEBROWSER_STATE,
     DEFAULT_SERVER_LIST,
 )
 
@@ -63,21 +63,26 @@ class ColorMapperEngine(VtkPipelineEngine):
 
 class FileBrowserEngine:
     def initialize(self, server):
+        args, _ = server.cli.parse_known_args()
         state, ctrl = server.state, server.controller
-        for key, value in DEFAULT_FILEBROWSER_STATE.items():
+        initial_state = get_initial_state(
+            local_root=args.local_root,
+            remote_root=args.remote_root,
+        )
+        for key, value in initial_state.items():
             setattr(state, key, value)
-        state.current_local_dir_contents = get_dir_contents(state.current_local_dir)
-        state.current_remote_dir_contents = get_dir_contents(state.current_remote_dir)
         state.file_types = get_applicable_file_types()
         ctrl.save_file = save_file
         ctrl.open_file = open_file
 
         @state.change("current_local_dir")
         def update_local_dir(current_local_dir, **kwargs):
+            print("update local dir to", current_local_dir)
             state.current_local_dir_contents = get_dir_contents(current_local_dir)
 
         @state.change("current_remote_dir")
         def update_remote_dir(current_remote_dir, **kwargs):
+            print("update remote dir to", current_remote_dir)
             state.current_remote_dir_contents = get_dir_contents(current_remote_dir)
 
 

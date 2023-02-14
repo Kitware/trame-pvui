@@ -43,7 +43,7 @@ class ServerBrowser(HtmlElement):
             "dark",
             "servers",
         ]
-        self.event_names = [
+        self._event_names += [
             ("add_server", "add"),
             ("update_server", "update"),
         ]

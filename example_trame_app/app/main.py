@@ -19,6 +19,9 @@ def main(server=None, **kwargs):
     # Make UI auto reload
     server.controller.on_server_reload.add(_reload)
 
+    server.cli.add_argument("--local_root", default=".")
+    server.cli.add_argument("--remote_root", default=".")
+
     # Init application
     engine.initialize(server)
     ui.initialize(server)
