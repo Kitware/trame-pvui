@@ -35,6 +35,14 @@ Install the application for use in a trame app:
     pip install -e .
 
 
+Running the Server
+----------
+
+.. code-block:: console
+
+    trame-pvui
+
+
 Contributing
---------
+----------
 see `CONTRIBUTING.rst`

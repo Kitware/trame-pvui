@@ -1,14 +1,17 @@
 <script>
 import { defineComponent, ref } from 'vue';
+import DataArrays from './DataArrays.vue';
+import DataGrouping from './DataGrouping.vue';
 
 export default defineComponent({
+  components: { DataGrouping, DataArrays },
   props: {
     fileProperties: {
       type: Object,
       required: true,
     },
-    dataXMLString: {
-      type: String,
+    dataGrouping: {
+      type: Array,
       required: true,
     },
     dataStatistics: {
@@ -31,7 +34,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-card class="container" elevation="3">
+  <v-card elevation="3">
     <v-card-title class="dark-title">Information</v-card-title>
     <v-expansion-panels v-model="expanded" accordion multiple>
       <v-expansion-panel>
@@ -61,7 +64,9 @@ export default defineComponent({
         <v-expansion-panel-header class="font-weight-bold">
           Data Grouping
         </v-expansion-panel-header>
-        <v-expansion-panel-content> TODO </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <data-grouping :dataGrouping="dataGrouping" />
+        </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header class="font-weight-bold">
@@ -90,21 +95,15 @@ export default defineComponent({
         <v-expansion-panel-header class="font-weight-bold">
           Data Arrays
         </v-expansion-panel-header>
-        <v-expansion-panel-content> TODO </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <data-arrays :dataArrays="dataArrays" />
+        </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
   </v-card>
 </template>
 
 <style scoped>
-.container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 400px;
-  height: min(600px, 100%);
-  padding: 0;
-}
 .dark-title {
   background-color: #444;
   color: white;
