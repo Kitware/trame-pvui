@@ -17,6 +17,7 @@ from .default_states import (
     DEFAULT_COLOR_MAP,
     DEFAULT_OPACITY_MAP,
     DEFAULT_SERVER_LIST,
+    DEFAULT_INFO_PANEL_CONTENTS,
 )
 
 logger = logging.getLogger(__name__)
@@ -94,11 +95,20 @@ class ServerBrowserEngine:
         ctrl.update_server = update_server
 
 
+class InfoPanelEngine:
+    def initialize(self, server):
+        state = server.state
+        print(server.client_type)
+        for key, value in DEFAULT_INFO_PANEL_CONTENTS.items():
+            setattr(state, key, value)
+
+
 class WidgetTesterEngine:
     def initialize(self, server):
         ColorMapperEngine().initialize(server)
         FileBrowserEngine().initialize(server)
         ServerBrowserEngine().initialize(server)
+        InfoPanelEngine().initialize(server)
 
 
 def initialize(server):

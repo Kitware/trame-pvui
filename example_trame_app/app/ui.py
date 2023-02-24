@@ -3,6 +3,7 @@ from trame.widgets import vuetify
 from trame.widgets import vtk
 from trame.app import get_server
 
+from trame_pvui.widgets.infopanel import InfoPanel
 from trame_pvui.widgets.colormapper import Colormapper
 from trame_pvui.widgets.filebrowser import FileBrowser
 from trame_pvui.widgets.serverbrowser import ServerBrowser
@@ -30,10 +31,18 @@ def initialize(server):
             drawer.width = 450
             with vuetify.VContainer(classes="pa-5"):
                 with vuetify.VTabs(grow=True, v_model=("tab", 0)):
+                    vuetify.VTab(children=["Info Panel"])
                     vuetify.VTab(children=["Color mapper"])
                     vuetify.VTab(children=["File browser"])
                     vuetify.VTab(children=["Server browser"])
                 with vuetify.VTabsItems(v_model=("tab", 0)):
+                    with vuetify.VTabItem():
+                        InfoPanel(
+                            file_properties=("file_properties",),
+                            data_grouping=("data_grouping",),
+                            data_statistics=("data_statistics",),
+                            data_arrays=("data_arrays",),
+                        )
                     with vuetify.VTabItem():
                         Colormapper(
                             histogram_data=("histogram_data",),
