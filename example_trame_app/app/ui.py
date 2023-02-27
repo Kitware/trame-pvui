@@ -42,6 +42,7 @@ def initialize(server):
                             data_grouping=("data_grouping",),
                             data_statistics=("data_statistics",),
                             data_arrays=("data_arrays",),
+                            timesteps=("timesteps",),
                         )
                     with vuetify.VTabItem():
                         Colormapper(

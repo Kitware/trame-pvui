@@ -17,5 +17,6 @@ class InfoPanel(HtmlElement):
             ("data_grouping", "dataGrouping"),
             ("data_statistics", "dataStatistics"),
             ("data_arrays", "dataArrays"),
+            ("timesteps", "timesteps"),
         ]
         self._event_names += []

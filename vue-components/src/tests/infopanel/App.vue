@@ -150,6 +150,11 @@ export default defineComponent({
           partial: false,
         },
       ],
+      timesteps: [
+        0.0, 0.00010007373930420727, 0.00019990510190837085,
+        0.00029996439116075635, 0.0004000865446869284, 0.0004999192315153778,
+        0.0005999351269565523, 0.0007000492187216878, 0.0008000352536328137,
+      ],
     };
   },
 });
@@ -164,6 +169,7 @@ export default defineComponent({
           :dataGrouping="dataGrouping"
           :dataStatistics="dataStatistics"
           :dataArrays="dataArrays"
+          :timesteps="timesteps"
         />
       </div>
     </v-app>

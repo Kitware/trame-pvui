@@ -22,6 +22,10 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    timesteps: {
+      type: Array,
+      required: false,
+    },
   },
   setup() {
     const expanded = ref([0]);
@@ -99,6 +103,21 @@ export default defineComponent({
           <data-arrays :dataArrays="dataArrays" />
         </v-expansion-panel-content>
       </v-expansion-panel>
+      <v-expansion-panel v-if="timesteps">
+        <v-expansion-panel-header class="font-weight-bold">
+          Timesteps
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-simple-table dense>
+            <tbody>
+              <tr v-for="(value, index) in timesteps" :key="index">
+                <td>{{ index }}</td>
+                <td>{{ value }}</td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
     </v-expansion-panels>
   </v-card>
 </template>
@@ -107,5 +126,8 @@ export default defineComponent({
 .dark-title {
   background-color: #444;
   color: white;
+}
+.v-card {
+  overflow: auto;
 }
 </style>
