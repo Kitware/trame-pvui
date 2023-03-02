@@ -49,7 +49,6 @@ class VtkPipeline:
         self.mapper = mapper
 
     def get_histogram_data(self, buckets):
-        print(self.reader.GetOutput().GetPointData())
         scalar_data_source = vtk_to_numpy(
             self.reader.GetOutput().GetPointData().GetScalars()
         )

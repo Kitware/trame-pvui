@@ -1,5 +1,7 @@
+# import paraview.web.venv  # noqa
 from trame.app import get_server, dev
-from . import engine, ui
+import engine
+import ui
 
 
 def _reload():

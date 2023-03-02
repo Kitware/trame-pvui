@@ -1,10 +1,9 @@
 from trame.ui.vuetify import SinglePageWithDrawerLayout
 from trame.widgets import vuetify
-from trame.widgets import vtk
+from trame.widgets import paraview
 from trame.app import get_server
 
 from trame_pvui.widgets.infopanel import InfoPanel
-from trame_pvui.widgets.colormapper import Colormapper
 from trame_pvui.widgets.filebrowser import FileBrowser
 from trame_pvui.widgets.serverbrowser import ServerBrowser
 
@@ -32,7 +31,6 @@ def initialize(server):
             with vuetify.VContainer(classes="pa-5"):
                 with vuetify.VTabs(grow=True, v_model=("tab", 0)):
                     vuetify.VTab(children=["Info Panel"])
-                    vuetify.VTab(children=["Color mapper"])
                     vuetify.VTab(children=["File browser"])
                     vuetify.VTab(children=["Server browser"])
                 with vuetify.VTabsItems(v_model=("tab", 0)):
@@ -43,14 +41,6 @@ def initialize(server):
                             data_statistics=("data_statistics",),
                             data_arrays=("data_arrays",),
                             timesteps=("timesteps",),
-                        )
-                    with vuetify.VTabItem():
-                        Colormapper(
-                            histogram_data=("histogram_data",),
-                            colors=("colormap_points",),
-                            opacities=("opacity_points",),
-                            update_colors="colormap_points = $event",
-                            update_opacities="opacity_points = $event",
                         )
                     with vuetify.VTabItem():
                         FileBrowser(
@@ -92,7 +82,7 @@ def initialize(server):
         # Main content
         with layout.content:
             with vuetify.VContainer(fluid=True, classes="pa-0 fill-height"):
-                html_view = vtk.VtkRemoteView(ctrl.get_render_window())
+                html_view = paraview.VtkRemoteView(ctrl.get_render_window())
                 ctrl.on_server_ready.add(html_view.update)
                 ctrl.view_update = html_view.update
 

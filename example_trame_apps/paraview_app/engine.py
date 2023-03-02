@@ -1,65 +1,58 @@
-from .vtk_pipeline import VtkPipeline
 from pathlib import Path
 import logging
 
-from .filebrowser_functions import (
+# from vtk_pipeline import VtkPipeline
+from paraview.simple import (
+    IOSSReader,
+    GetActiveViewOrCreate,
+    GetAnimationScene,
+    GetTimeKeeper,
+    Render,
+    SetActiveSource,
+    Show,
+)
+
+from filebrowser_functions import (
     get_initial_state,
     get_applicable_file_types,
     get_dir_contents,
     save_file,
     open_file,
 )
-from .serverbrowser_functions import (
+from serverbrowser_functions import (
     add_server,
     update_server,
 )
-from .default_states import (
-    DEFAULT_COLOR_MAP,
-    DEFAULT_OPACITY_MAP,
-    DEFAULT_SERVER_LIST,
-    DEFAULT_INFO_PANEL_CONTENTS,
-)
+
+from infopanel_functions import DataInformationMicroservice
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-DATASET_PATH = Path("example_trame_app/data/skull.vti").absolute()
+DATASET_PATH = Path("example_trame_apps/data/can.ex2").absolute()
 
 
-class VtkPipelineEngine:
+class ParaviewEngine:
     def initialize(self, server):
-        self.vtk_pipeline = VtkPipeline(DATASET_PATH)
         state, ctrl = server.state, server.controller
-        state.trame__title = "View skull.vti"
         self.state = state
-        self.ctrl = ctrl
+        self.control = ctrl
+
+        self.reader = IOSSReader(
+            registrationName="can.ex2",
+            FileName=[str(DATASET_PATH)],
+        )
+        self.animation = GetAnimationScene()
+        self.time_keeper = GetTimeKeeper()
+        self.animation.UpdateAnimationUsingDataTimeSteps()
+        SetActiveSource(self.reader)
+        self.render = GetActiveViewOrCreate("RenderView")
+        self.repr = Show()
+        self.view = Render()
 
         @ctrl.set("get_render_window")
         def get_render_window():
-            return self.vtk_pipeline.render_window
-
-
-class ColorMapperEngine(VtkPipelineEngine):
-    def initialize(self, server, **kwargs):
-        super().initialize(server)
-        state, ctrl = server.state, server.controller
-        state.colormap_points = DEFAULT_COLOR_MAP
-        state.opacity_points = DEFAULT_OPACITY_MAP
-        state.histogram_data = self.vtk_pipeline.get_histogram_data(buckets=10)
-
-        @state.change("colormap_points")
-        def update_colors(colormap_points, **kwargs):
-            self.vtk_pipeline.update_colors(colormap_points)
-            ctrl.view_update()
-
-        @state.change("opacity_points")
-        def update_opacity(opacity_points, **kwargs):
-            self.vtk_pipeline.update_opacity(opacity_points)
-            ctrl.view_update()
-
-        @ctrl.set("reset_colormap_points")
-        def reset_colormap_points(self):
-            self._server.state.colormap_points = DEFAULT_COLOR_MAP
+            return self.view
 
 
 class FileBrowserEngine:
@@ -90,7 +83,7 @@ class FileBrowserEngine:
 class ServerBrowserEngine:
     def initialize(self, server):
         state, ctrl = server.state, server.controller
-        state.servers = DEFAULT_SERVER_LIST
+        state.servers = []
         ctrl.add_server = add_server
         ctrl.update_server = update_server
 
@@ -99,13 +92,15 @@ class InfoPanelEngine:
     def initialize(self, server):
         state = server.state
         print(server.client_type)
-        for key, value in DEFAULT_INFO_PANEL_CONTENTS.items():
+        microservice = DataInformationMicroservice()
+        print(microservice)
+        for key, value in []:
             setattr(state, key, value)
 
 
 class WidgetTesterEngine:
     def initialize(self, server):
-        ColorMapperEngine().initialize(server)
+        ParaviewEngine().initialize(server)
         FileBrowserEngine().initialize(server)
         ServerBrowserEngine().initialize(server)
         InfoPanelEngine().initialize(server)
