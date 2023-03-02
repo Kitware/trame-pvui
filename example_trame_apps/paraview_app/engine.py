@@ -1,12 +1,12 @@
 from pathlib import Path
 import logging
 
-# from vtk_pipeline import VtkPipeline
 from paraview.simple import (
     IOSSReader,
     GetActiveViewOrCreate,
     GetAnimationScene,
     GetTimeKeeper,
+    OpenDataFile,
     Render,
     SetActiveSource,
     Show,
@@ -24,7 +24,7 @@ from serverbrowser_functions import (
     update_server,
 )
 
-from infopanel_functions import DataInformationMicroservice
+from infopanel_functions import DataInformationMicroservice, DataAssemplyToDict
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -91,11 +91,59 @@ class ServerBrowserEngine:
 class InfoPanelEngine:
     def initialize(self, server):
         state = server.state
-        print(server.client_type)
-        microservice = DataInformationMicroservice()
-        print(microservice)
-        for key, value in []:
-            setattr(state, key, value)
+
+        split_path = str(DATASET_PATH).split("/")
+        state.file_properties = {
+            "name": split_path[-1],
+            "folder": "/".join(split_path[:-1]),
+        }
+
+        self.microservice = DataInformationMicroservice()
+        proxy = OpenDataFile(str(DATASET_PATH))
+        self.microservice.SetProxy(proxy)
+        self.microservice.UpdateDataInformation()
+        info = self.microservice.GetDataInformation()
+        state.data_grouping = DataAssemplyToDict(info.GetHierarchy())
+        state.timesteps = self.microservice.GetTimeSteps()
+
+        @state.change("selected_node")
+        def update_selected_node(selected_node, **kwargs):
+            print("update selected node to", selected_node)
+            if selected_node == "/Root":
+                self.microservice.UpdateDataInformation()
+            else:
+                self.microservice.UpdateDataInformation(selectorPath=selected_node)
+            node_info = self.microservice.GetDataInformation()
+
+            state.data_statistics = {
+                "type": node_info.GetPrettyDataTypeString(),
+                "num_datasets": node_info.GetNumberOfDataSets(),
+                "num_cells": node_info.GetNumberOfCells(),
+                "num_points": node_info.GetNumberOfPoints(),
+                "current_time": node_info.GetTime(),
+                "num_timesteps": node_info.GetNumberOfTimeSteps(),
+                "time_range": node_info.GetTimeRange(),
+                "memory": node_info.GetMemorySize(),
+                "bounds": node_info.GetBounds(),
+            }
+            state.data_arrays = []
+            for array_collection in [
+                node_info.GetPointDataInformation(),
+                node_info.GetCellDataInformation(),
+                node_info.GetFieldDataInformation(),
+            ]:
+                for i in range(array_collection.GetNumberOfArrays()):
+                    array = array_collection.GetArrayInformation(i)
+                    state.data_arrays.append(
+                        {
+                            "name": array.GetName(),
+                            "type": array.GetDataTypeAsString(),
+                            "ranges": array.GetRangesAsString(),
+                            "partial": array.GetIsPartial(),
+                        }
+                    )
+
+        state.selected_node = "/Root"
 
 
 class WidgetTesterEngine:

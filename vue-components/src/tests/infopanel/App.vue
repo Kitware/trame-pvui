@@ -8,7 +8,13 @@ export default defineComponent({
   name: 'HomePage',
   components: { InfoPanel },
   setup() {
+    function setSelectedNode(selectedNode) {
+      console.log('set selected node', selectedNode);
+    }
+
     return {
+      setSelectedNode,
+      selectedNode: '/Root',
       fileProperties: {
         name: 'Inspire.png',
         path: '/home/localUser/Documents/pv_examples/',
@@ -165,11 +171,13 @@ export default defineComponent({
     <v-app>
       <div class="container">
         <info-panel
+          :selectedNode="selectedNode"
           :fileProperties="fileProperties"
           :dataGrouping="dataGrouping"
           :dataStatistics="dataStatistics"
           :dataArrays="dataArrays"
           :timesteps="timesteps"
+          @setSelectedNode="setSelectedNode"
         />
       </div>
     </v-app>

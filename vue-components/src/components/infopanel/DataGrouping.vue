@@ -1,5 +1,5 @@
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
   props: {
@@ -8,7 +8,14 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
+    const activeNode = ref();
+
+    function updateActive(actives) {
+      activeNode.value = actives[0];
+      emit('select', activeNode.value);
+    }
+
     function fillChildren(node, childrenList) {
       if (!node) return node;
       return Object.assign(node, {
@@ -18,14 +25,16 @@ export default defineComponent({
       });
     }
 
-    const tree = [
+    const tree = computed(() => [
       fillChildren(
         props.dataGrouping.find((e) => e.name == 'Root' && e.path === '/Root'),
         props.dataGrouping
       ),
-    ];
-    console.log(tree);
+    ]);
+
     return {
+      activeNode,
+      updateActive,
       tree,
     };
   },
@@ -33,5 +42,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-treeview :items="tree" dense> </v-treeview>
+  <v-treeview
+    :items="tree"
+    :active="[activeNode]"
+    @update:active="updateActive"
+    item-key="path"
+    hoverable
+    dense
+    activatable
+  >
+  </v-treeview>
 </template>

@@ -6,6 +6,10 @@ import DataGrouping from './DataGrouping.vue';
 export default defineComponent({
   components: { DataGrouping, DataArrays },
   props: {
+    selectedNode: {
+      type: String,
+      required: true,
+    },
     fileProperties: {
       type: Object,
       required: true,
@@ -27,11 +31,16 @@ export default defineComponent({
       required: false,
     },
   },
-  setup() {
+  setup(_props, { emit }) {
     const expanded = ref([0]);
+
+    function setSelectedNode(selectedNode) {
+      emit('setSelectedNode', selectedNode);
+    }
 
     return {
       expanded,
+      setSelectedNode,
     };
   },
 });
@@ -69,7 +78,10 @@ export default defineComponent({
           Data Grouping
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <data-grouping :dataGrouping="dataGrouping" />
+          <data-grouping
+            :dataGrouping="dataGrouping"
+            @select="setSelectedNode"
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>

@@ -36,11 +36,13 @@ def initialize(server):
                 with vuetify.VTabsItems(v_model=("tab", 0)):
                     with vuetify.VTabItem():
                         InfoPanel(
+                            selected_node=("selected_node",),
                             file_properties=("file_properties",),
                             data_grouping=("data_grouping",),
                             data_statistics=("data_statistics",),
                             data_arrays=("data_arrays",),
                             timesteps=("timesteps",),
+                            set_selected_node="selected_node = $event",
                         )
                     with vuetify.VTabItem():
                         FileBrowser(
