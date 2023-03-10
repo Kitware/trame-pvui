@@ -5,6 +5,7 @@
   "scripts": {
     "serve:colormapper": "vue-cli-service serve src/tests/colormapper/main.js",
     "serve:filebrowser": "vue-cli-service serve src/tests/filebrowser/main.js",
+    "serve:infopanel": "vue-cli-service serve src/tests/infopanel/main.js",
     "serve:serverbrowser": "vue-cli-service serve src/tests/serverbrowser/main.js",
     "build": "vue-cli-service build --target lib src/use.js",
     "lint": "vue-cli-service lint",
@@ -18,10 +19,8 @@
     "core-js": "^3.8.3",
     "typeface-roboto": "^1.1.13",
     "typescript": "~4.5.5",
-    "vue": "^2.6.14",
-    "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^9.1.2",
-    "vuetify": "^2.6.9"
+    "vuetify": "^2.6.14",
+    "vue": "^2.7.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.19.1",
@@ -39,9 +38,7 @@
     "prettier": "^2.4.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
-    "vue-cli-plugin-vuetify": "~2.5.5",
-    "vue-template-compiler": "^2.6.14",
-    "vuetify-loader": "^1.7.0"
+    "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
     "root": true,

@@ -19,7 +19,7 @@ Run the development server
     cd vue-components
     npm run serve:[widget_name]
 
-Where `widget_name` is one of [`colormapper`, `filebrowser`, `serverbrowser`].
+Where `widget_name` is one of [`colormapper`, `filebrowser`, `infopanel`, `serverbrowser`].
 To add a new option for `widget_name`, add a vue app file in `vue-components/src/tests`.
 Make changes within `vue-components/src/components/[widget_name]`.
 To make a Vue widget usable in trame, there must be a python file in `trame_pvui/widgets`.
