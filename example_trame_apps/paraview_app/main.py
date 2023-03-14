@@ -1,4 +1,4 @@
-# import paraview.web.venv  # noqa
+import paraview.web.venv  # noqa
 from trame.app import get_server, dev
 import engine
 import ui
