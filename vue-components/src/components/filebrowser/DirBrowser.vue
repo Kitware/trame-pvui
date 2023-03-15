@@ -76,15 +76,10 @@ export default {
     },
     openItem(e, { item }) {
       if (item?.type === 'folder') {
-        const folderLocation = this.currentDir + '/' + item.name;
-        if (this.allDirectories.includes(folderLocation)) {
-          this.$emit('setCurrentDir', {
-            locationType: this.locationType,
-            dirName: folderLocation,
-          });
-        } else {
-          console.error(folderLocation, 'not found');
-        }
+        this.$emit('setCurrentDir', {
+          locationType: this.locationType,
+          dirName: item.full_path,
+        });
       }
     },
     expandGroup(group) {

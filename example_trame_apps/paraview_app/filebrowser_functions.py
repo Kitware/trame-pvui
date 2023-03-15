@@ -22,21 +22,22 @@ def get_dir_contents(dir_name):
     ret = []
     for p in Path(dir_name).glob("*"):
         stats = p.stat()
-        filename = str(p).split("/")[-1]
+        filename = p.name
         filetype = "folder" if p.is_dir() else f'{filename.split(".")[-1].upper()} file'
         size = get_file_size_string(stats.st_size) if filetype != "folder" else "--"
         modified = datetime.fromtimestamp(stats.st_mtime).strftime("%m/%d/%Y, %H:%M:%S")
         owner = getpwuid(stats.st_uid).pw_name
 
-        ret += [
+        ret.append(
             {
                 "name": filename,
                 "type": filetype,
                 "size": size,
                 "modified": modified,
                 "owner": owner,
+                "full_path": str(p.absolute()),
             }
-        ]
+        )
     return ret
 
 
