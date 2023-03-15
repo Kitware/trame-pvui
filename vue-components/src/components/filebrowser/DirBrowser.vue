@@ -253,6 +253,7 @@ export default {
         show-select
         hide-default-footer
         fixed-header
+        :itemsPerPage="-1"
         id="virtual-scroll-table"
         v-model="selectedItems"
         :items="tableItems"
