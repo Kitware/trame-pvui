@@ -3,8 +3,10 @@ from pwd import getpwuid
 
 
 def get_dir_tree_as_list(root_dir):
-    ret = [str(p.absolute()) for p in Path(root_dir).rglob("*") if p.is_dir()]
-    ret.append(str(root_dir.absolute()))
+    root_path = Path(root_dir)
+    # this is the list used in the drop down populate with parents of root in increasing depth order
+    ret = [str(root_path.absolute())]
+    ret += [str(p) for p in root_path.parents]
     return ret
 
 
@@ -35,8 +37,8 @@ def get_initial_state(local_root, remote_root):
     local_root = Path(local_root).absolute()
     remote_root = Path(remote_root).absolute()
     return {
-        "local_directories": get_dir_tree_as_list(local_root),
-        "remote_directories": get_dir_tree_as_list(remote_root),
+        "local_hierarchy": get_dir_tree_as_list(local_root),
+        "remote_hierarchy": get_dir_tree_as_list(remote_root),
         "current_local_dir_contents": get_dir_contents(local_root),
         "current_remote_dir_contents": get_dir_contents(remote_root),
         "current_local_dir": str(local_root),

@@ -9,7 +9,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    allDirectories: {
+    directoryHierarchy: {
       type: Array,
       required: true,
     },
@@ -106,15 +106,12 @@ export default {
       console.log('Go forward');
     },
     goToParent() {
+      // TODO this will fail with a windows server
       const parent = this.currentDir.split('/').slice(0, -1).join('/');
-      if (this.allDirectories.includes(parent)) {
-        this.$emit('setCurrentDir', {
-          locationType: this.locationType,
-          dirName: parent,
-        });
-      } else {
-        console.error(parent, 'not found');
-      }
+      this.$emit('setCurrentDir', {
+        locationType: this.locationType,
+        dirName: parent,
+      });
     },
     createFolder() {
       console.log('create folder');
@@ -181,7 +178,7 @@ export default {
   <v-card>
     <div class="dir-select-box">
       <v-select
-        :items="allDirectories"
+        :items="directoryHierarchy"
         :value="currentDir"
         :label="locationType + ' Directory'"
         class="dir-select"

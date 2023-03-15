@@ -52,8 +52,8 @@ def initialize(server):
                             current_remote_dir_contents=(
                                 "current_remote_dir_contents",
                             ),
-                            local_directories=("local_directories",),
-                            remote_directories=("remote_directories",),
+                            local_hierarchy=("local_hierarchy",),
+                            remote_hierarchy=("remote_hierarchy",),
                             file_types=("file_types",),
                             set_local_dir="current_local_dir = $event",
                             set_remote_dir="current_remote_dir = $event",
@@ -71,8 +71,8 @@ def initialize(server):
                             current_remote_dir_contents=(
                                 "current_remote_dir_contents",
                             ),
-                            local_directories=("local_directories",),
-                            remote_directories=("remote_directories",),
+                            local_hierarchy=("local_hierarchy",),
+                            remote_hierarchy=("remote_hierarchy",),
                             set_local_dir="current_local_dir = $event",
                             set_remote_dir="current_remote_dir = $event",
                             mode="Open",

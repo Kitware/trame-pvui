@@ -11,11 +11,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    localDirectories: {
+    localHierarchy: {
       type: Array,
       default: () => [],
     },
-    remoteDirectories: {
+    remoteHierarchy: {
       type: Array,
       default: () => [],
     },
@@ -127,7 +127,7 @@ export default {
                 @setFileName="(name) => (this.filename = name)"
                 locationType="Local"
                 :small="syncCurrentLocalAndRemote"
-                :allDirectories="localDirectories"
+                :directoryHierarchy="localHierarchy"
                 :currentDir="currentLocalDir"
                 :dirContents="currentLocalDirContents"
                 :byteFormatter="byteFormatter"
@@ -141,7 +141,7 @@ export default {
                 @setFileName="(name) => (this.filename = name)"
                 locationType="Remote"
                 :small="syncCurrentLocalAndRemote"
-                :allDirectories="remoteDirectories"
+                :directoryHierarchy="remoteHierarchy"
                 :currentDir="currentRemoteDir"
                 :dirContents="currentRemoteDirContents"
                 :byteFormatter="byteFormatter"
@@ -161,7 +161,7 @@ export default {
               @setFileName="(name) => (this.filename = name)"
               locationType="Local"
               :small="syncCurrentLocalAndRemote"
-              :allDirectories="localDirectories"
+              :directoryHierarchy="localHierarchy"
               :currentDir="currentLocalDir"
               :dirContents="currentLocalDirContents"
               :byteFormatter="byteFormatter"
@@ -178,7 +178,7 @@ export default {
               @setFileName="(name) => (this.filename = name)"
               locationType="Remote"
               :small="syncCurrentLocalAndRemote"
-              :allDirectories="remoteDirectories"
+              :directoryHierarchy="remoteHierarchy"
               :currentDir="currentRemoteDir"
               :dirContents="currentRemoteDirContents"
               :byteFormatter="byteFormatter"
