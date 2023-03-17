@@ -1,5 +1,10 @@
 def test_import_via_package():
-    from trame_pvui.widgets import Colormapper, FileBrowser, ServerBrowser  # noqa: F401
+    from trame_pvui.widgets import (  # noqa: F401
+        Colormapper,
+        FileBrowser,
+        ServerBrowser,
+        InfoPanel,
+    )
 
 
 def test_import_via_trame():
@@ -8,4 +13,5 @@ def test_import_via_trame():
         Colormapper,
         FileBrowser,
         ServerBrowser,
+        InfoPanel,
     )
