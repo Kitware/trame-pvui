@@ -59,6 +59,10 @@ class InfoPanel(HtmlElement):
 
      `timesteps` is list of the timestep values available in the dataset.
 
+     `byte_formatter": A (name of a) Javascript function to format the memory field of data_statistics.
+     `float_formatter": A (name of a) Javascript function to format floats throughout the panel.
+     `integer_formatter": A (name of a) Javascript function to format integers throughout the panel.
+
 
      Events:
 
@@ -81,6 +85,9 @@ class InfoPanel(HtmlElement):
             ("data_statistics", "dataStatistics"),
             ("data_arrays", "dataArrays"),
             ("timesteps", "timesteps"),
+            ("byte_formatter", "byteFormatter"),
+            ("integer_formatter", "integerFormatter"),
+            ("float_formatter", "floatFormatter"),
         ]
         self._event_names += [
             ("set_selected_node", "setSelectedNode"),

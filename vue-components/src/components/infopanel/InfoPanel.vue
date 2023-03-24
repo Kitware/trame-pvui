@@ -4,27 +4,6 @@ import DataArrays from './DataArrays.vue';
 import DataGrouping from './DataGrouping.vue';
 
 export default defineComponent({
-  methods: {
-    format_integer(num) {
-      return num.toLocaleString();
-    },
-    /* TODO make this configurable */
-    format_float(num) {
-      return num.toFixed(3);
-    },
-    format_memory(num_bytes) {
-      const size_units = ['TB', 'GB', 'MB', 'kB', 'bytes'];
-      const size = size_units.length;
-      for (const [i, suffix] of size_units.entries()) {
-        const exponent = size - 2 - i;
-        const divisor = 1000 ** exponent;
-        if (num_bytes > divisor) {
-          return num_bytes / divisor + ' ' + suffix;
-        }
-      }
-      return 'None';
-    },
-  },
   components: { DataGrouping, DataArrays },
   props: {
     selectedNode: {
@@ -50,6 +29,21 @@ export default defineComponent({
     timesteps: {
       type: Array,
       required: false,
+    },
+    byteFormatter: {
+      type: Function,
+      required: false,
+      default: (bytes) => bytes + ' bytes',
+    },
+    integerFormatter: {
+      type: Function,
+      required: false,
+      default: (num) => num,
+    },
+    floatFormatter: {
+      type: Function,
+      required: false,
+      default: (num) => num,
     },
   },
   setup(_props, { emit }) {
@@ -126,45 +120,45 @@ export default defineComponent({
               <tr>
                 <td class="labelColumn"># of Cells</td>
                 <td class="valueColumn">
-                  {{ format_integer(dataStatistics['num_cells']) }}
+                  {{ integerFormatter(dataStatistics['num_cells']) }}
                 </td>
               </tr>
               <tr>
                 <td class="labelColumn"># of Points</td>
                 <td class="valueColumn">
-                  {{ format_integer(dataStatistics['num_points']) }}
+                  {{ integerFormatter(dataStatistics['num_points']) }}
                 </td>
               </tr>
               <tr>
                 <td class="labelColumn"># of Timesteps</td>
                 <td class="valueColumn">
-                  {{ format_integer(dataStatistics['num_timesteps']) }}
+                  {{ integerFormatter(dataStatistics['num_timesteps']) }}
                 </td>
               </tr>
               <tr>
                 <td class="labelColumn">Current Time</td>
                 <td class="valueColumn">
-                  {{ format_float(dataStatistics['current_time']) }} (range: [{{
-                    format_float(dataStatistics['time_range'][0])
-                  }}, {{ format_float(dataStatistics['time_range'][1]) }} ] )
+                  {{ floatFormatter(dataStatistics['current_time']) }} (range:
+                  [{{ floatFormatter(dataStatistics['time_range'][0]) }},
+                  {{ floatFormatter(dataStatistics['time_range'][1]) }} ] )
                 </td>
               </tr>
               <tr>
                 <td class="labelColumn">Memory</td>
                 <td class="valueColumn">
-                  {{ format_memory(dataStatistics['memory']) }}
+                  {{ byteFormatter(dataStatistics['memory']) }}
                 </td>
               </tr>
               <tr>
                 <td class="labelColumn">Bounds</td>
                 <td class="valueColumn">
                   <span v-for="index in 3" :key="index">
-                    {{ format_float(dataStatistics['bounds'][index]) }} to
-                    {{ format_float(dataStatistics['bounds'][index + 1]) }}
+                    {{ floatFormatter(dataStatistics['bounds'][index]) }} to
+                    {{ floatFormatter(dataStatistics['bounds'][index + 1]) }}
                     <span class="detail">
                       (delta:
                       {{
-                        format_float(
+                        floatFormatter(
                           dataStatistics['bounds'][index + 1] -
                             dataStatistics['bounds'][index]
                         )

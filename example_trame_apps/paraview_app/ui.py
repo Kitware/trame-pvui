@@ -43,6 +43,11 @@ def initialize(server):
                             data_arrays=("data_arrays",),
                             timesteps=("timesteps",),
                             set_selected_node="selected_node = $event",
+                            byte_formatter=("utils.fmt.bytes",),
+                            integer_formatter=("(n) => n.toLocaleString()",),
+                            float_formatter=(
+                                "(n) => utils.fmt.number(n, units=[''], steps=1000, fixed=5)",
+                            ),
                         )
                     with vuetify.VTabItem():
                         FileBrowser(
