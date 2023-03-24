@@ -138,7 +138,12 @@ class InfoPanelEngine:
                         {
                             "name": array.GetName(),
                             "type": array.GetDataTypeAsString(),
-                            "ranges": array.GetRangesAsString(),
+                            "ranges": [
+                                array.GetComponentRange(i)
+                                for i in range(array.GetNumberOfComponents())
+                            ]
+                            if array.GetDataTypeAsString() != "string"
+                            else array.GetRangesAsString(),
                             "partial": array.GetIsPartial(),
                         }
                     )

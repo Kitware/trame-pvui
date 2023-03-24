@@ -47,7 +47,7 @@ class InfoPanel(HtmlElement):
       {
         name : str
         type: str
-        ranges: str
+        ranges: str if type == str, list([min,max] of each component ) otherwise
         partial: int
       }
 

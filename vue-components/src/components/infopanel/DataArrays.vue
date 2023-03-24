@@ -40,7 +40,15 @@ export default defineComponent({
       <tr>
         <td class="nameColumn">{{ item.name }}</td>
         <td class="typeColumn">{{ item.type }}</td>
-        <td class="rangeColumn">{{ item.ranges }}</td>
+        <td class="rangeColumn">
+          <span v-if="item.type === 'string'"> {{ item.ranges }} </span>
+          <span v-else>
+            <span v-for="(range, index) in item.ranges" :key="index">
+              {{ range }}
+              <span v-if="index != item.ranges.length"> , </span>
+            </span>
+          </span>
+        </td>
       </tr>
     </template>
   </v-data-table>
