@@ -95,7 +95,7 @@ class InfoPanelEngine:
         split_path = str(DATASET_PATH).split("/")
         state.file_properties = {
             "name": split_path[-1],
-            "folder": "/".join(split_path[:-1]),
+            "path": "/".join(split_path[:-1]),
         }
 
         self.microservice = DataInformationMicroservice()
@@ -120,10 +120,10 @@ class InfoPanelEngine:
                 "num_datasets": node_info.GetNumberOfDataSets(),
                 "num_cells": node_info.GetNumberOfCells(),
                 "num_points": node_info.GetNumberOfPoints(),
-                "current_time": node_info.GetTime(),
                 "num_timesteps": node_info.GetNumberOfTimeSteps(),
+                "current_time": node_info.GetTime(),
                 "time_range": node_info.GetTimeRange(),
-                "memory": node_info.GetMemorySize(),
+                "memory": node_info.GetMemorySize() * 1024,  # convert to bytes
                 "bounds": node_info.GetBounds(),
             }
             state.data_arrays = []
