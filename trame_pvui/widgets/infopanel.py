@@ -5,6 +5,67 @@ from .widget import HtmlElement
 # Information Panel Widget
 # -----------------------------------------------------------------------------
 class InfoPanel(HtmlElement):
+    """
+     The InfoPanel widget for trame allows to display information organized in 5
+     sections of tabulated data: "File Properties", "Data Grouping", "Data
+     Statistics", "Data Arrays" and "TimeSteps"
+
+    `file_properties` is a dictionary with the following format:
+    {
+      name:str,
+      path:str,
+    }
+
+
+    `data_statistics` is a dictionary with the following format:
+    # TODO say which are optional
+     {
+       type: str,
+       num_datasets: int,
+       num_cells: int,
+       num_points: int,
+       num_timesteps: int,
+       current_time: float,
+       time_range: [float,float]
+       memory: int (in bytes),
+       bounds: [int,int,int,int,int,int] in  [xmin,xam,ymin,ymax,zmin,zmax] order
+     }
+
+
+     `data_grouping` a list of dictionaries
+     [
+       {
+         id: int
+         name: str
+         path: str
+         children: [int]
+       },
+     ]
+
+     `data_arrays` is a list of dictionaries with the following fields
+
+      {
+        name : str
+        type: str
+        ranges: str
+        partial: int
+      }
+
+      and is rendered as a table :
+       Name   |   Type    |  Ranges
+              |           |
+              ....
+     where each list entry is a row in the table.
+
+     `timesteps` is list of the timestep values available in the dataset.
+
+
+     Events:
+
+     :param set_selected_node: Event triggered when the selects one of the nodes of data_grouping tree.
+     :type set_selected_node: TODO
+    """
+
     def __init__(self, **kwargs):
         super().__init__(
             "info-panel",
