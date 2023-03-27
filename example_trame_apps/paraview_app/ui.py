@@ -60,6 +60,9 @@ def initialize(server):
                             mode="Save",
                             submit=ctrl.save_file,
                             byte_formatter=("utils.fmt.bytes",),
+                            date_formatter=(
+                                "(m)=> new Date(m *1000).toLocaleString()",
+                            ),
                         )
                         FileBrowser(
                             current_local_dir=("current_local_dir",),
@@ -75,6 +78,7 @@ def initialize(server):
                             mode="Open",
                             submit=ctrl.open_file,
                             byte_formatter=("utils.fmt.bytes",),
+                            date_formatter=("(m)=> new Date(m*1000).toLocaleString()",),
                         )
                     with vuetify.VTabItem():
                         ServerBrowser(

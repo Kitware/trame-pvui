@@ -1,5 +1,4 @@
 from pathlib import Path
-from datetime import datetime
 from pwd import getpwuid
 
 
@@ -16,7 +15,7 @@ def get_dir_contents(dir_name):
         filename = p.name
         filetype = "folder" if p.is_dir() else f'{filename.split(".")[-1].upper()} file'
         size = stats.st_size
-        modified = datetime.fromtimestamp(stats.st_mtime).strftime("%m/%d/%Y, %H:%M:%S")
+        modification_time = stats.st_mtime
         owner = getpwuid(stats.st_uid).pw_name
 
         ret.append(
@@ -24,7 +23,7 @@ def get_dir_contents(dir_name):
                 "name": filename,
                 "type": filetype,
                 "size": size,
-                "modified": modified,
+                "modification_time": modification_time,
                 "owner": owner,
                 "full_path": str(p.absolute()),
             }

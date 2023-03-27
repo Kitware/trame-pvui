@@ -26,6 +26,11 @@ export default {
       required: false,
       default: (bytes) => bytes,
     },
+    dateFormatter: {
+      type: Function,
+      required: false,
+      default: (timestamp) => timestamp,
+    },
   },
   methods: {
     getIcon(type: string) {
@@ -155,10 +160,10 @@ export default {
       },
       { text: 'Type', align: 'end', value: 'type' },
       { text: 'Size', align: 'end', value: 'size' },
-      { text: 'Date Modified', align: 'end', value: 'modified' },
+      { text: 'Date Modified', align: 'end', value: 'modification_time' },
       { text: 'Owner', align: 'end', value: 'owner' },
     ];
-    const columnsShown = ['name', 'type', 'size', 'modified'];
+    const columnsShown = ['name', 'type', 'size', 'modification_time'];
 
     return {
       showColumnPicker: false,
@@ -278,6 +283,9 @@ export default {
         </template>
         <template v-slot:[`item.size`]="{ item }">
           {{ byteFormatter(item.size) }}
+        </template>
+        <template v-slot:[`item.modification_time`]="{ item }">
+          {{ dateFormatter(item.modification_time) }}
         </template>
       </v-data-table>
       <v-overlay

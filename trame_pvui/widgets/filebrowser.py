@@ -52,6 +52,9 @@ class FileBrowser(HtmlElement):
 
     :param byte_formatter (optional): A function that converts raw bytes to a user-friendlier string for populating the size column of the file browser.
     :type byte_formatter: (name of) a JS function to format the size in bytes to a string.
+    
+    :param date_formatter (optional): A function that converts raw UNIX timestapss to a user-friendlier string for populating the date column of the file browser.
+    :type date_formatter: (name of) a JS function to format the date to a string.
 
     Events:
 
@@ -75,6 +78,7 @@ class FileBrowser(HtmlElement):
             ("current_local_dir_contents", "currentLocalDirContents"),
             ("current_remote_dir_contents", "currentRemoteDirContents"),
             ("byte_formatter", "byteFormatter"),
+            ("date_formatter", "dateFormatter"),
         ]
         self._event_names += [
             ("set_local_dir", "setLocalDir"),

@@ -44,6 +44,11 @@ export default {
       required: false,
       default: (bytes) => bytes + ' bytes',
     },
+    dateFormatter: {
+      type: Function,
+      required: false,
+      default: (timestamp) => new Date(timestamp * 1000).toDateString(),
+    },
   },
   data() {
     return {
@@ -126,6 +131,7 @@ export default {
                 :currentDir="currentLocalDir"
                 :dirContents="currentLocalDirContents"
                 :byteFormatter="byteFormatter"
+                :dateFormatter="dateFormatter"
               />
             </v-tab-item>
             <v-tab-item>
@@ -139,6 +145,7 @@ export default {
                 :currentDir="currentRemoteDir"
                 :dirContents="currentRemoteDirContents"
                 :byteFormatter="byteFormatter"
+                :dateFormatter="dateFormatter"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -158,6 +165,7 @@ export default {
               :currentDir="currentLocalDir"
               :dirContents="currentLocalDirContents"
               :byteFormatter="byteFormatter"
+              :dateFormatter="dateFormatter"
             />
           </div>
           <div>
@@ -174,6 +182,7 @@ export default {
               :currentDir="currentRemoteDir"
               :dirContents="currentRemoteDirContents"
               :byteFormatter="byteFormatter"
+              :dateFormatter="dateFormatter"
             />
           </div>
         </div>
