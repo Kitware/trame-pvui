@@ -21,6 +21,11 @@ export default {
       type: Array,
       required: true,
     },
+    byteFormatter: {
+      type: Function,
+      required: false,
+      default: (bytes) => bytes,
+    },
   },
   methods: {
     getIcon(type: string) {
@@ -270,6 +275,9 @@ export default {
           </v-icon>
           <v-icon v-else>{{ getIcon(item.type) }}</v-icon>
           {{ item.name }}
+        </template>
+        <template v-slot:[`item.size`]="{ item }">
+          {{ byteFormatter(item.size) }}
         </template>
       </v-data-table>
       <v-overlay

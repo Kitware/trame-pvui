@@ -3,15 +3,6 @@ from datetime import datetime
 from pwd import getpwuid
 
 
-def get_file_size_string(num_bytes):
-    size_units = ["GB", "MB", "kB", "bytes"]
-    for i, suffix in enumerate(size_units):
-        exponent = len(size_units) - 1 - i
-        divisor = 1024**exponent
-        if num_bytes > divisor:
-            return f"{round(num_bytes / divisor)} {suffix}"
-
-
 def get_dir_tree_as_list(root_dir):
     ret = [str(p.absolute()) for p in Path(root_dir).rglob("*") if p.is_dir()]
     ret.append(str(root_dir.absolute()))
@@ -24,7 +15,7 @@ def get_dir_contents(dir_name):
         stats = p.stat()
         filename = p.name
         filetype = "folder" if p.is_dir() else f'{filename.split(".")[-1].upper()} file'
-        size = get_file_size_string(stats.st_size) if filetype != "folder" else "--"
+        size = stats.st_size
         modified = datetime.fromtimestamp(stats.st_mtime).strftime("%m/%d/%Y, %H:%M:%S")
         owner = getpwuid(stats.st_uid).pw_name
 

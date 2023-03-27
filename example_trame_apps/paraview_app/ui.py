@@ -59,6 +59,7 @@ def initialize(server):
                             set_remote_dir="current_remote_dir = $event",
                             mode="Save",
                             submit=ctrl.save_file,
+                            byte_formatter=("utils.fmt.bytes",),
                         )
                         FileBrowser(
                             current_local_dir=("current_local_dir",),
@@ -73,6 +74,7 @@ def initialize(server):
                             set_remote_dir="current_remote_dir = $event",
                             mode="Open",
                             submit=ctrl.open_file,
+                            byte_formatter=("utils.fmt.bytes",),
                         )
                     with vuetify.VTabItem():
                         ServerBrowser(

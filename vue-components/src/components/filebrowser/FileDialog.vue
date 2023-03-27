@@ -39,6 +39,11 @@ export default {
       type: Array,
       default: () => [],
     },
+    byteFormatter: {
+      type: Function,
+      required: false,
+      default: (bytes) => bytes + ' bytes',
+    },
   },
   data() {
     return {
@@ -120,6 +125,7 @@ export default {
                 :allDirectories="localDirectories"
                 :currentDir="currentLocalDir"
                 :dirContents="currentLocalDirContents"
+                :byteFormatter="byteFormatter"
               />
             </v-tab-item>
             <v-tab-item>
@@ -132,6 +138,7 @@ export default {
                 :allDirectories="remoteDirectories"
                 :currentDir="currentRemoteDir"
                 :dirContents="currentRemoteDirContents"
+                :byteFormatter="byteFormatter"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -150,6 +157,7 @@ export default {
               :allDirectories="localDirectories"
               :currentDir="currentLocalDir"
               :dirContents="currentLocalDirContents"
+              :byteFormatter="byteFormatter"
             />
           </div>
           <div>
@@ -165,6 +173,7 @@ export default {
               :allDirectories="remoteDirectories"
               :currentDir="currentRemoteDir"
               :dirContents="currentRemoteDirContents"
+              :byteFormatter="byteFormatter"
             />
           </div>
         </div>
