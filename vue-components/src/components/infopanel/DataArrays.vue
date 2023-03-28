@@ -22,6 +22,7 @@ export default defineComponent({
       {
         text: 'Ranges',
         value: 'ranges',
+        sortable: false,
       },
     ];
     const items = props.dataArrays;
@@ -34,5 +35,46 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-data-table dense :headers="headers" :items="items"> </v-data-table>
+  <v-data-table dense :headers="headers" :items="items" item-key="name">
+    <template v-slot:item="{ item }">
+      <tr>
+        <td class="nameColumn">{{ item.name }}</td>
+        <td class="typeColumn">{{ item.type }}</td>
+        <td class="rangeColumn">
+          <span v-if="item.type === 'string'"> {{ item.ranges }} </span>
+          <span v-else>
+            <span v-for="(range, index) in item.ranges" :key="index">
+              {{ range }}
+              <span v-if="index != item.ranges.length"> , </span>
+            </span>
+          </span>
+        </td>
+      </tr>
+    </template>
+  </v-data-table>
 </template>
+
+<style scoped>
+::v-deep .v-data-table-header {
+  color: #424242ff;
+  background-color: #ecececff;
+}
+
+.nameColumn {
+  color: #1565c0ff;
+  background-color: #fbfbfbff;
+}
+
+.typeColumn {
+  color: #1565c0ff;
+  background-color: #fbfbfbff;
+}
+
+.rangeColumn {
+  color: #1565c0ff;
+  background-color: #fbfbfbff;
+  /* Fixed column size to longest label without breaking */
+  width: 1%;
+  white-space: nowrap;
+}
+</style>
