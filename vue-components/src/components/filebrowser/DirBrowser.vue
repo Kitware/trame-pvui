@@ -9,7 +9,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    allDirectories: {
+    directoryHierarchy: {
       type: Array,
       required: true,
     },
@@ -20,6 +20,16 @@ export default {
     dirContents: {
       type: Array,
       required: true,
+    },
+    byteFormatter: {
+      type: Function,
+      required: false,
+      default: (bytes) => bytes,
+    },
+    dateFormatter: {
+      type: Function,
+      required: false,
+      default: (timestamp) => timestamp,
     },
   },
   methods: {
@@ -76,15 +86,10 @@ export default {
     },
     openItem(e, { item }) {
       if (item?.type === 'folder') {
-        const folderLocation = this.currentDir + '/' + item.name;
-        if (this.allDirectories.includes(folderLocation)) {
-          this.$emit('setCurrentDir', {
-            locationType: this.locationType,
-            dirName: folderLocation,
-          });
-        } else {
-          console.error(folderLocation, 'not found');
-        }
+        this.$emit('setCurrentDir', {
+          locationType: this.locationType,
+          dirName: item.full_path,
+        });
       }
     },
     expandGroup(group) {
@@ -101,15 +106,12 @@ export default {
       console.log('Go forward');
     },
     goToParent() {
+      // TODO this will fail with a windows server
       const parent = this.currentDir.split('/').slice(0, -1).join('/');
-      if (this.allDirectories.includes(parent)) {
-        this.$emit('setCurrentDir', {
-          locationType: this.locationType,
-          dirName: parent,
-        });
-      } else {
-        console.error(parent, 'not found');
-      }
+      this.$emit('setCurrentDir', {
+        locationType: this.locationType,
+        dirName: parent,
+      });
     },
     createFolder() {
       console.log('create folder');
@@ -155,10 +157,10 @@ export default {
       },
       { text: 'Type', align: 'end', value: 'type' },
       { text: 'Size', align: 'end', value: 'size' },
-      { text: 'Date Modified', align: 'end', value: 'modified' },
+      { text: 'Date Modified', align: 'end', value: 'modification_time' },
       { text: 'Owner', align: 'end', value: 'owner' },
     ];
-    const columnsShown = ['name', 'type', 'size', 'modified'];
+    const columnsShown = ['name', 'type', 'size', 'modification_time'];
 
     return {
       showColumnPicker: false,
@@ -176,7 +178,7 @@ export default {
   <v-card>
     <div class="dir-select-box">
       <v-select
-        :items="allDirectories"
+        :items="directoryHierarchy"
         :value="currentDir"
         :label="locationType + ' Directory'"
         class="dir-select"
@@ -253,6 +255,7 @@ export default {
         show-select
         hide-default-footer
         fixed-header
+        :itemsPerPage="-1"
         id="virtual-scroll-table"
         v-model="selectedItems"
         :items="tableItems"
@@ -274,6 +277,12 @@ export default {
           </v-icon>
           <v-icon v-else>{{ getIcon(item.type) }}</v-icon>
           {{ item.name }}
+        </template>
+        <template v-slot:[`item.size`]="{ item }">
+          {{ byteFormatter(item.size) }}
+        </template>
+        <template v-slot:[`item.modification_time`]="{ item }">
+          {{ dateFormatter(item.modification_time) }}
         </template>
       </v-data-table>
       <v-overlay

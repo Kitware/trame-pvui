@@ -11,11 +11,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    localDirectories: {
+    localHierarchy: {
       type: Array,
       default: () => [],
     },
-    remoteDirectories: {
+    remoteHierarchy: {
       type: Array,
       default: () => [],
     },
@@ -38,6 +38,16 @@ export default {
     fileTypes: {
       type: Array,
       default: () => [],
+    },
+    byteFormatter: {
+      type: Function,
+      required: false,
+      default: (bytes) => bytes + ' bytes',
+    },
+    dateFormatter: {
+      type: Function,
+      required: false,
+      default: (timestamp) => new Date(timestamp * 1000).toDateString(),
     },
   },
   data() {
@@ -117,9 +127,11 @@ export default {
                 @setFileName="(name) => (this.filename = name)"
                 locationType="Local"
                 :small="syncCurrentLocalAndRemote"
-                :allDirectories="localDirectories"
+                :directoryHierarchy="localHierarchy"
                 :currentDir="currentLocalDir"
                 :dirContents="currentLocalDirContents"
+                :byteFormatter="byteFormatter"
+                :dateFormatter="dateFormatter"
               />
             </v-tab-item>
             <v-tab-item>
@@ -129,9 +141,11 @@ export default {
                 @setFileName="(name) => (this.filename = name)"
                 locationType="Remote"
                 :small="syncCurrentLocalAndRemote"
-                :allDirectories="remoteDirectories"
+                :directoryHierarchy="remoteHierarchy"
                 :currentDir="currentRemoteDir"
                 :dirContents="currentRemoteDirContents"
+                :byteFormatter="byteFormatter"
+                :dateFormatter="dateFormatter"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -147,9 +161,11 @@ export default {
               @setFileName="(name) => (this.filename = name)"
               locationType="Local"
               :small="syncCurrentLocalAndRemote"
-              :allDirectories="localDirectories"
+              :directoryHierarchy="localHierarchy"
               :currentDir="currentLocalDir"
               :dirContents="currentLocalDirContents"
+              :byteFormatter="byteFormatter"
+              :dateFormatter="dateFormatter"
             />
           </div>
           <div>
@@ -162,9 +178,11 @@ export default {
               @setFileName="(name) => (this.filename = name)"
               locationType="Remote"
               :small="syncCurrentLocalAndRemote"
-              :allDirectories="remoteDirectories"
+              :directoryHierarchy="remoteHierarchy"
               :currentDir="currentRemoteDir"
               :dirContents="currentRemoteDirContents"
+              :byteFormatter="byteFormatter"
+              :dateFormatter="dateFormatter"
             />
           </div>
         </div>

@@ -16,6 +16,7 @@ from filebrowser_functions import (
     get_initial_state,
     get_applicable_file_types,
     get_dir_contents,
+    get_dir_tree_as_list,
     save_file,
     open_file,
 )
@@ -73,11 +74,13 @@ class FileBrowserEngine:
         def update_local_dir(current_local_dir, **kwargs):
             print("update local dir to", current_local_dir)
             state.current_local_dir_contents = get_dir_contents(current_local_dir)
+            state.local_hierarchy = get_dir_tree_as_list(current_local_dir)
 
         @state.change("current_remote_dir")
         def update_remote_dir(current_remote_dir, **kwargs):
             print("update remote dir to", current_remote_dir)
             state.current_remote_dir_contents = get_dir_contents(current_remote_dir)
+            state.remote_hierarchy = get_dir_tree_as_list(current_remote_dir)
 
 
 class ServerBrowserEngine:

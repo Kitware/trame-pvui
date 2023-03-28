@@ -30,10 +30,10 @@ class FileBrowser(HtmlElement):
     :param file_types: List containing file types applicable to the current file (in Save mode only).
     :param file_types: list[{value: string, text: string}]
 
-    :param local_directories: List of all possible local directory paths
-    :type local_directories: list[str]
-    :param remote_directories: List of all possible remote directory paths
-    :type remote_directories: list[str]
+    :param local_hierarchy: List of full paths of all parents of current_local_dir
+    :type local_hierarchy: list[str]
+    :param remote_hierarchy: List of full paths of all parents of current_remote_dir
+    :type remote_hierarchy: list[str]
 
     :param current_local_dir: Current local directory path
     :type current_local_dir: str
@@ -50,6 +50,12 @@ class FileBrowser(HtmlElement):
     :param set_remote_dir: Event triggered when user changes the current remote dir
     :type set_remote_dir: Function or JS expression (event)
 
+    :param byte_formatter (optional): A function that converts raw bytes to a user-friendlier string for populating the size column of the file browser.
+    :type byte_formatter: (name of) a JS function to format the size in bytes to a string.
+
+    :param date_formatter (optional): A function that converts raw UNIX timestapss to a user-friendlier string for populating the date column of the file browser.
+    :type date_formatter: (name of) a JS function to format the date to a string.
+
     Events:
 
     :param submit: Event triggered when user clicks the submit button, either to Save or to Open
@@ -65,12 +71,14 @@ class FileBrowser(HtmlElement):
             "mode",
             "dark",
             ("file_types", "fileTypes"),
-            ("local_directories", "localDirectories"),
-            ("remote_directories", "remoteDirectories"),
+            ("local_hierarchy", "localHierarchy"),
+            ("remote_hierarchy", "remoteHierarchy"),
             ("current_local_dir", "currentLocalDir"),
             ("current_remote_dir", "currentRemoteDir"),
             ("current_local_dir_contents", "currentLocalDirContents"),
             ("current_remote_dir_contents", "currentRemoteDirContents"),
+            ("byte_formatter", "byteFormatter"),
+            ("date_formatter", "dateFormatter"),
         ]
         self._event_names += [
             ("set_local_dir", "setLocalDir"),

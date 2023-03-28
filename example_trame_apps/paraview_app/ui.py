@@ -57,13 +57,17 @@ def initialize(server):
                             current_remote_dir_contents=(
                                 "current_remote_dir_contents",
                             ),
-                            local_directories=("local_directories",),
-                            remote_directories=("remote_directories",),
+                            local_hierarchy=("local_hierarchy",),
+                            remote_hierarchy=("remote_hierarchy",),
                             file_types=("file_types",),
                             set_local_dir="current_local_dir = $event",
                             set_remote_dir="current_remote_dir = $event",
                             mode="Save",
                             submit=ctrl.save_file,
+                            byte_formatter=("utils.fmt.bytes",),
+                            date_formatter=(
+                                "(m)=> new Date(m *1000).toLocaleString()",
+                            ),
                         )
                         FileBrowser(
                             current_local_dir=("current_local_dir",),
@@ -72,12 +76,14 @@ def initialize(server):
                             current_remote_dir_contents=(
                                 "current_remote_dir_contents",
                             ),
-                            local_directories=("local_directories",),
-                            remote_directories=("remote_directories",),
+                            local_hierarchy=("local_hierarchy",),
+                            remote_hierarchy=("remote_hierarchy",),
                             set_local_dir="current_local_dir = $event",
                             set_remote_dir="current_remote_dir = $event",
                             mode="Open",
                             submit=ctrl.open_file,
+                            byte_formatter=("utils.fmt.bytes",),
+                            date_formatter=("(m)=> new Date(m*1000).toLocaleString()",),
                         )
                     with vuetify.VTabItem():
                         ServerBrowser(
