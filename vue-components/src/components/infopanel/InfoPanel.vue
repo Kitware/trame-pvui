@@ -70,29 +70,31 @@ export default defineComponent({
           File Properties
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-simple-table dense>
-            <tbody>
-              <tr>
-                <td class="labelColumn">Name</td>
-                <td class="valueColumn">
-                  <div v-if="fileProperties['name'] != ''">
-                    {{ fileProperties['name'] }}
-                  </div>
-                  <div v-else>N/A</div>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="labelColumn">Path</td>
-                <td class="valueColumn">
-                  <div v-if="fileProperties['name'] != ''">
-                    {{ fileProperties['path'] }}
-                  </div>
-                  <div v-else>N/A</div>
-                </td>
-              </tr>
-            </tbody>
-          </v-simple-table>
+          <div v-if="fileProperties">
+            <v-simple-table dense>
+              <tbody>
+                <tr>
+                  <td class="labelColumn">Name</td>
+                  <td class="valueColumn">
+                    <div v-if="fileProperties['name'] != ''">
+                      {{ fileProperties['name'] }}
+                    </div>
+                    <div v-else>N/A</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="labelColumn">Path</td>
+                  <td class="valueColumn">
+                    <div v-if="fileProperties['name'] != ''">
+                      {{ fileProperties['path'] }}
+                    </div>
+                    <div v-else>N/A</div>
+                  </td>
+                </tr>
+              </tbody>
+            </v-simple-table>
+          </div>
+          <div v-else>N/A</div>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -100,10 +102,13 @@ export default defineComponent({
           Data Grouping
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <data-grouping
-            :dataGrouping="dataGrouping"
-            @select="setSelectedNode"
-          />
+          <div v-if="dataGrouping">
+            <data-grouping
+              :dataGrouping="dataGrouping"
+              @select="setSelectedNode"
+            />
+          </div>
+          <div v-else>N/A</div>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -111,65 +116,68 @@ export default defineComponent({
           Data Statistics
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-simple-table dense>
-            <tbody>
-              <tr>
-                <td class="labelColumn">Type</td>
-                <td class="valueColumn">{{ dataStatistics['type'] }}</td>
-              </tr>
-              <tr>
-                <td class="labelColumn"># of Cells</td>
-                <td class="valueColumn">
-                  {{ integerFormatter(dataStatistics['num_cells']) }}
-                </td>
-              </tr>
-              <tr>
-                <td class="labelColumn"># of Points</td>
-                <td class="valueColumn">
-                  {{ integerFormatter(dataStatistics['num_points']) }}
-                </td>
-              </tr>
-              <tr>
-                <td class="labelColumn"># of Timesteps</td>
-                <td class="valueColumn">
-                  {{ integerFormatter(dataStatistics['num_timesteps']) }}
-                </td>
-              </tr>
-              <tr>
-                <td class="labelColumn">Current Time</td>
-                <td class="valueColumn">
-                  {{ floatFormatter(dataStatistics['current_time']) }} (range:
-                  [{{ floatFormatter(dataStatistics['time_range'][0]) }},
-                  {{ floatFormatter(dataStatistics['time_range'][1]) }} ] )
-                </td>
-              </tr>
-              <tr>
-                <td class="labelColumn">Memory</td>
-                <td class="valueColumn">
-                  {{ byteFormatter(dataStatistics['memory']) }}
-                </td>
-              </tr>
-              <tr>
-                <td class="labelColumn">Bounds</td>
-                <td class="valueColumn">
-                  <span v-for="index in 3" :key="index">
-                    {{ floatFormatter(dataStatistics['bounds'][index]) }} to
-                    {{ floatFormatter(dataStatistics['bounds'][index + 1]) }}
-                    <span class="detail">
-                      (delta:
-                      {{
-                        floatFormatter(
-                          dataStatistics['bounds'][index + 1] -
-                            dataStatistics['bounds'][index]
-                        )
-                      }})
+          <div v-if="dataStatistics">
+            <v-simple-table dense>
+              <tbody>
+                <tr>
+                  <td class="labelColumn">Type</td>
+                  <td class="valueColumn">{{ dataStatistics['type'] }}</td>
+                </tr>
+                <tr>
+                  <td class="labelColumn"># of Cells</td>
+                  <td class="valueColumn">
+                    {{ integerFormatter(dataStatistics['num_cells']) }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="labelColumn"># of Points</td>
+                  <td class="valueColumn">
+                    {{ integerFormatter(dataStatistics['num_points']) }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="labelColumn"># of Timesteps</td>
+                  <td class="valueColumn">
+                    {{ integerFormatter(dataStatistics['num_timesteps']) }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="labelColumn">Current Time</td>
+                  <td class="valueColumn">
+                    {{ floatFormatter(dataStatistics['current_time']) }} (range:
+                    [{{ floatFormatter(dataStatistics['time_range'][0]) }},
+                    {{ floatFormatter(dataStatistics['time_range'][1]) }} ] )
+                  </td>
+                </tr>
+                <tr>
+                  <td class="labelColumn">Memory</td>
+                  <td class="valueColumn">
+                    {{ byteFormatter(dataStatistics['memory']) }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="labelColumn">Bounds</td>
+                  <td class="valueColumn">
+                    <span v-for="index in 3" :key="index">
+                      {{ floatFormatter(dataStatistics['bounds'][index]) }} to
+                      {{ floatFormatter(dataStatistics['bounds'][index + 1]) }}
+                      <span class="detail">
+                        (delta:
+                        {{
+                          floatFormatter(
+                            dataStatistics['bounds'][index + 1] -
+                              dataStatistics['bounds'][index]
+                          )
+                        }})
+                      </span>
+                      <span v-if="index != 3"> <br /> </span>
                     </span>
-                    <span v-if="index != 3"> <br /> </span>
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </v-simple-table>
+                  </td>
+                </tr>
+              </tbody>
+            </v-simple-table>
+          </div>
+          <div v-else>N/A</div>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -177,7 +185,10 @@ export default defineComponent({
           Data Arrays
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <data-arrays :dataArrays="dataArrays" />
+          <div v-if="dataArrays">
+            <data-arrays :dataArrays="dataArrays" />
+          </div>
+          <div v-else>N/A</div>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel v-if="timesteps">
