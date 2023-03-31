@@ -8,7 +8,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     const headers = [
       {
         text: 'Name',
@@ -25,17 +25,15 @@ export default defineComponent({
         sortable: false,
       },
     ];
-    const items = props.dataArrays;
     return {
       headers,
-      items,
     };
   },
 });
 </script>
 
 <template>
-  <v-data-table dense :headers="headers" :items="items" item-key="name">
+  <v-data-table dense :headers="headers" :items="dataArrays" item-key="name">
     <template v-slot:item="{ item }">
       <tr>
         <td class="nameColumn">{{ item.name }}</td>
