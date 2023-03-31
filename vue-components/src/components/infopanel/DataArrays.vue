@@ -43,7 +43,7 @@ export default defineComponent({
           <span v-else>
             <span v-for="(range, index) in item.ranges" :key="index">
               {{ range }}
-              <span v-if="index != item.ranges.length"> , </span>
+              <span v-if="index != item.ranges.length - 1"> , </span>
             </span>
           </span>
         </td>
