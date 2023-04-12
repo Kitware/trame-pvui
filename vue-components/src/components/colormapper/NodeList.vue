@@ -349,7 +349,7 @@ export default {
   </v-data-table>
 </template>
 
-<style>
+<style scoped>
 tr.selected {
   background-color: rgba(0, 0, 0, 0.1);
 }
