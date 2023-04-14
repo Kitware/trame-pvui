@@ -61,6 +61,9 @@ export default defineComponent({
 .nameColumn {
   color: #1565c0ff;
   background-color: #fbfbfbff;
+  /* Fixed column size to longest label without breaking */
+  width: 1%;
+  white-space: nowrap;
 }
 
 .typeColumn {
