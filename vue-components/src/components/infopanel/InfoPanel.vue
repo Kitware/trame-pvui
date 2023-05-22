@@ -135,13 +135,13 @@ export default defineComponent({
                     {{ integerFormatter(dataStatistics['num_points']) }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="dataStatistics['num_timesteps'] != 0">
                   <td class="labelColumn"># of Timesteps</td>
                   <td class="valueColumn">
                     {{ integerFormatter(dataStatistics['num_timesteps']) }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="dataStatistics['num_timesteps'] != 0">
                   <td class="labelColumn">Current Time</td>
                   <td class="valueColumn">
                     {{ floatFormatter(dataStatistics['current_time']) }} (range:
