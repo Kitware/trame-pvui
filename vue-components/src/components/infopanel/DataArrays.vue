@@ -8,7 +8,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     const headers = [
       {
         text: 'Name',
@@ -25,17 +25,15 @@ export default defineComponent({
         sortable: false,
       },
     ];
-    const items = props.dataArrays;
     return {
       headers,
-      items,
     };
   },
 });
 </script>
 
 <template>
-  <v-data-table dense :headers="headers" :items="items" item-key="name">
+  <v-data-table dense :headers="headers" :items="dataArrays" item-key="name">
     <template v-slot:item="{ item }">
       <tr>
         <td class="nameColumn">{{ item.name }}</td>
@@ -45,7 +43,7 @@ export default defineComponent({
           <span v-else>
             <span v-for="(range, index) in item.ranges" :key="index">
               {{ range }}
-              <span v-if="index != item.ranges.length"> , </span>
+              <span v-if="index != item.ranges.length - 1"> , </span>
             </span>
           </span>
         </td>
@@ -63,6 +61,9 @@ export default defineComponent({
 .nameColumn {
   color: #1565c0ff;
   background-color: #fbfbfbff;
+  /* Fixed column size to longest label without breaking */
+  width: 1%;
+  white-space: nowrap;
 }
 
 .typeColumn {
