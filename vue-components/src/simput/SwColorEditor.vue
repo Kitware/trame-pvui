@@ -168,7 +168,7 @@ export default {
     };
     this.simputChannel.$on('templateTS', this.onUpdateUI);
     this.flushSolidColorToServer = debounce(() => {
-      // May have an issue for beeing 2 calls instead of just 1!
+      // May have an issue for being 2 calls instead of just 1!
       this.dirtyMany('AmbientColor', 'DiffuseColor');
     }, 100);
     this.onQuery = (query) => {
