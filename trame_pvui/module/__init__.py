@@ -12,7 +12,20 @@ scripts = ["__pvui/pvui.umd.min.js"]
 # List of CSS files to load (usually from the serve path above)
 styles = ["__pvui/pvui.css"]
 
-vuetify_config = {}
+vuetify_config = {
+    "icons": {
+        "values": {
+            "pqEditColor": {"component": "pq-edit-color"},
+            "pqEditScalarBar": {"component": "pq-edit-scalar-bar"},
+            "pqFavorites": {"component": "pq-favorites"},
+            "pqResetRange": {"component": "pq-reset-range"},
+            "pqResetRangeCustom": {"component": "pq-reset-range-custom"},
+            "pqResetRangeTemporal": {"component": "pq-reset-range-temporal"},
+            "pqScalarBar": {"component": "pq-scalar-bar"},
+            "pqSeparateColorMap": {"component": "pq-separate-color-map"},
+        }
+    }
+}
 
 # List of Vue plugins to install/load
 vue_use = ["pvui", ("trame_vuetify", vuetify_config)]
