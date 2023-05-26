@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.1 (2023-05-26)
+### Fix
+* **FileBrowser:** Improve usability ([`5aa2aa1`](https://github.com/Kitware/trame-pvui/commit/5aa2aa174df1634bcc89e00299dc52ae2e93bf1e))
+
 ## v0.1.0 (2023-05-24)
 ### Feature
 * Consolidate JS code for Async ParaView ([`42907b8`](https://github.com/Kitware/trame-pvui/commit/42907b81ae3d2f654edc33891659f1e1f5637378))
