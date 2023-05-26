@@ -1,15 +1,17 @@
-==========
 Trame Paraview UI widgets
-==========
+===========================================================
 
 Trame widgets which may be used in the Paraview user interface (Pvui)
 
+License
+-----------------------------------------------------------
 
-* Free software: Apache Software License
+Apache Software License
 
 
 Features
---------
+-----------------------------------------------------------
+
 This package includes the following widgets:
 
  - Colormapper
@@ -19,7 +21,7 @@ This package includes the following widgets:
 
 
 Installing
-----------
+-----------------------------------------------------------
 Build and install the Vue components:
 
 .. code-block:: console
@@ -31,7 +33,7 @@ Build and install the Vue components:
 
 
 Getting Started
-----------
+-----------------------------------------------------------
 
 Paraview >= 5.11 is a prerequisite to running this application.
 Go to https://www.paraview.org/download/ for more information.
@@ -49,7 +51,7 @@ with this application and its requirements installed
 
 
 Running the example apps
-----------
+-----------------------------------------------------------
 
 To run the example paraview app, use the following
 
@@ -66,5 +68,6 @@ To run the example vtk app (which hosts the colormapper widget), use the followi
 
 
 Contributing
-----------
+-----------------------------------------------------------
+
 see `CONTRIBUTING.rst`

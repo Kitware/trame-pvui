@@ -69,6 +69,11 @@ class FileBrowser(HtmlElement):
         )
         self._attr_names += [
             "mode",
+            "title",
+            "visible",
+            "locations",
+            ("goto_shortcuts", "shortcutGoTo"),
+            ("enable_history", "enableHistory"),
             "dark",
             ("file_types", "fileTypes"),
             ("local_hierarchy", "localHierarchy"),
@@ -84,4 +89,6 @@ class FileBrowser(HtmlElement):
             ("set_local_dir", "setLocalDir"),
             ("set_remote_dir", "setRemoteDir"),
             "submit",
+            "close",
+            "goto",
         ]

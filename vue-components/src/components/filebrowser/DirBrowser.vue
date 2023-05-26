@@ -1,6 +1,9 @@
 <script lang="ts">
 export default {
   props: {
+    enableHistory: {
+      type: Boolean,
+    },
     locationType: {
       type: String,
       required: true,
@@ -31,6 +34,13 @@ export default {
       required: false,
       default: (timestamp) => timestamp,
     },
+    gotoShortcuts: {
+      type: Array,
+      default: () => ['favorites', 'recents', 'locations'],
+    },
+    canCreateDirectory: {
+      type: Boolean,
+    },
   },
   methods: {
     getIcon(type: string) {
@@ -38,7 +48,7 @@ export default {
         case 'folder':
           return 'mdi-folder';
         default:
-          return 'mdi-file';
+          return 'mdi-file-outline';
       }
     },
     selectItem(selected) {
@@ -86,6 +96,7 @@ export default {
     },
     openItem(e, { item }) {
       if (item?.type === 'folder') {
+        this.filterString = '';
         this.$emit('setCurrentDir', {
           locationType: this.locationType,
           dirName: item.full_path,
@@ -104,6 +115,15 @@ export default {
     },
     goForward() {
       console.log('Go forward');
+    },
+    goToLocations() {
+      this.$emit('goto', 'locations');
+    },
+    goToRecents() {
+      this.$emit('goto', 'recents');
+    },
+    goToFavorites() {
+      this.$emit('goto', 'favorites');
     },
     goToParent() {
       // TODO this will fail with a windows server
@@ -152,13 +172,17 @@ export default {
         text: 'Filename',
         align: 'start',
         value: 'name',
-        width: 200,
         sortable: true,
       },
-      { text: 'Type', align: 'end', value: 'type' },
-      { text: 'Size', align: 'end', value: 'size' },
-      { text: 'Date Modified', align: 'end', value: 'modification_time' },
-      { text: 'Owner', align: 'end', value: 'owner' },
+      { text: 'Type', width: 50, align: 'center', value: 'type' },
+      { text: 'Size', width: 120, align: 'end', value: 'size' },
+      {
+        text: 'Date Modified',
+        width: 200,
+        align: 'center',
+        value: 'modification_time',
+      },
+      { text: 'Owner', width: 100, align: 'end', value: 'owner' },
     ];
     const columnsShown = ['name', 'type', 'size', 'modification_time'];
 
@@ -175,32 +199,53 @@ export default {
 </script>
 
 <template>
-  <v-card>
+  <v-card class="fill-height" flat rounded="0">
     <div class="dir-select-box">
+      <v-btn
+        v-if="enableHistory"
+        x-small
+        width="35"
+        height="35"
+        class="mr-1"
+        @click="goBack"
+      >
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
+
+      <v-btn
+        v-if="enableHistory"
+        x-small
+        width="35"
+        height="35"
+        class="mr-1"
+        @click="goForward"
+      >
+        <v-icon>mdi-arrow-right</v-icon>
+      </v-btn>
+
+      <v-btn x-small width="35" height="35" class="mx-1" @click="goToParent">
+        <v-icon>mdi-folder-arrow-up-outline</v-icon>
+      </v-btn>
+
       <v-select
+        dense
         :items="directoryHierarchy"
         :value="currentDir"
         :label="locationType + ' Directory'"
-        class="dir-select"
+        class="mx-1"
         solo
         hide-details
         @change="
           (dir) => this.$emit('setCurrentDir', { locationType, dirName: dir })
         "
       />
-      <v-btn x-small style="height: 45px" @click="goBack">
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-      <v-btn x-small style="height: 45px" @click="goForward">
-        <v-icon>mdi-arrow-right</v-icon>
-      </v-btn>
-      <v-btn x-small style="height: 45px" @click="goToParent">
-        <v-icon>mdi-folder-arrow-up-outline</v-icon>
-      </v-btn>
 
       <v-btn
+        v-if="canCreateDirectory"
         x-small
-        style="height: 45px; margin-left: 10px"
+        width="35"
+        height="35"
+        class="ml-2"
         @click="createFolder"
       >
         <v-icon>mdi-folder-plus-outline</v-icon>
@@ -211,52 +256,66 @@ export default {
       <v-chip
         color="rgb(70, 70, 70)"
         small
-        class="filter-button"
-        text-color="white"
+        class="filter-button mr-2 px-1"
+        @click="goToRecents"
+        v-if="gotoShortcuts.includes('recents')"
       >
         <v-avatar>
-          <v-icon :small="small">mdi-history</v-icon>
+          <v-icon small>mdi-history</v-icon>
         </v-avatar>
-        <div v-if="!small" class="pl-1">Recents</div>
+        <div v-if="!small" class="pr-1">Recents</div>
       </v-chip>
       <v-chip
         color="rgb(70, 70, 70)"
         small
-        class="filter-button"
-        text-color="white"
+        class="filter-button mr-2 px-1"
+        @click="goToFavorites"
+        v-if="gotoShortcuts.includes('favorites')"
       >
         <v-avatar>
-          <v-icon :small="small">mdi-heart</v-icon>
+          <v-icon small>mdi-heart</v-icon>
         </v-avatar>
-        <div v-if="!small" class="pl-1">Favorites</div>
+        <div v-if="!small" class="pr-1">Favorites</div>
       </v-chip>
       <v-chip
         color="rgb(70, 70, 70)"
         small
-        class="filter-button"
-        text-color="white"
+        class="filter-button mr-2 px-1"
+        @click="goToLocations"
+        v-if="gotoShortcuts.includes('locations')"
       >
         <v-avatar>
-          <v-icon :small="small">mdi-folder-marker</v-icon>
+          <v-icon small>mdi-folder-marker</v-icon>
         </v-avatar>
-        <div v-if="!small" class="pl-1">Locations</div>
+        <div v-if="!small" class="pr-1">Locations</div>
       </v-chip>
       <v-text-field
         v-model="filterString"
-        prepend-icon="mdi-magnify"
+        prepend-inner-icon="mdi-magnify"
+        clearable
+        outlined
+        filled
+        rounded
+        dense
+        background-color="white"
         hide-details
-        autofocus
         placeholder="Filter by keyword"
-        class="filter-input"
+        style="transform: scale(0.75) translateX(15%)"
       />
     </div>
-    <div style="position: relative">
+
+    <div
+      style="
+        position: relative;
+        overflow: auto;
+        height: calc(100% - 50px - 58px);
+      "
+    >
       <v-data-table
         show-select
         hide-default-footer
         fixed-header
         :itemsPerPage="-1"
-        id="virtual-scroll-table"
         v-model="selectedItems"
         :items="tableItems"
         item-key="name"
@@ -332,19 +391,8 @@ export default {
 .filter-button {
   outline: 1px solid white;
   color: white;
-  padding: 0px 5px;
-  margin: 0px 3px;
-  min-width: 32px;
 }
-.filter-input {
-  background-color: white;
-  height: 30px;
-  border-radius: 20px;
-  padding: 0px 10px;
-  min-width: 20px;
-  margin-top: 0;
-  margin-left: 5px;
-}
+
 .column-picker {
   right: 10px;
   top: 10px;
@@ -360,9 +408,5 @@ export default {
 .v-overlay__content {
   width: 100%;
   height: 100%;
-}
-#virtual-scroll-table {
-  max-height: 400px;
-  overflow: auto;
 }
 </style>

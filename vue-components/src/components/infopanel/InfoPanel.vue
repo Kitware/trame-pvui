@@ -45,6 +45,9 @@ export default defineComponent({
       required: false,
       default: (num) => num,
     },
+    visibleContent: {
+      type: Boolean,
+    },
   },
   setup(_props, { emit }) {
     const expanded = ref([0]);
@@ -63,8 +66,21 @@ export default defineComponent({
 
 <template>
   <v-card elevation="3">
-    <v-card-title class="dark-title">Information</v-card-title>
-    <v-expansion-panels v-model="expanded" accordion multiple>
+    <v-card-title
+      class="dark-title px-1 py-1 text-h6"
+      style="user-select: none"
+      @click="$emit('toggleVisibleContent', !visibleContent)"
+    >
+      <v-icon dark v-if="visibleContent">mdi-chevron-up</v-icon>
+      <v-icon dark v-else>mdi-chevron-down</v-icon>
+      <span class="ml-1">Information</span>
+    </v-card-title>
+    <v-expansion-panels
+      v-model="expanded"
+      v-show="visibleContent"
+      accordion
+      multiple
+    >
       <v-expansion-panel>
         <v-expansion-panel-header class="font-weight-bold">
           File Properties

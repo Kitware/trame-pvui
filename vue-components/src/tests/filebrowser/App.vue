@@ -2,6 +2,23 @@
 import components from '../../components';
 const { FileBrowser } = components;
 
+function addFiles(array, count = 100) {
+  const type = 'file';
+  const size = 100000;
+  const modified = '10/30/22 12:23pm';
+  const owner = 'root';
+
+  for (let i = 0; i < count; i++) {
+    array.push({
+      name: `generated_${i}.txt`,
+      type,
+      size,
+      modified,
+      owner,
+    });
+  }
+}
+
 export default {
   name: 'HomePage',
   components: { FileBrowser },
@@ -96,7 +113,8 @@ export default {
           ],
         },
       ];
-      return possibleFiles.filter(() => Math.random() < 0.5);
+      addFiles(possibleFiles, 100);
+      return possibleFiles.filter(() => Math.random() < 0.8);
     },
     save(fileInfo) {
       console.log('save', fileInfo);
@@ -149,7 +167,9 @@ export default {
     <v-app>
       <div class="d-flex">
         <file-browser
-          mode="Save"
+          visible
+          title="Save State"
+          mode="save"
           :currentLocalDir="currentLocalDir"
           :currentRemoteDir="currentRemoteDir"
           :remoteDirectories="remoteDirectories"
@@ -162,7 +182,10 @@ export default {
           @submit="save"
         />
         <file-browser
-          mode="Open"
+          visible
+          title="Open Data File"
+          mode="open"
+          :gotoShortcuts="['favorites', 'recents', 'locations']"
           :currentLocalDir="currentLocalDir"
           :currentRemoteDir="currentRemoteDir"
           :remoteDirectories="remoteDirectories"

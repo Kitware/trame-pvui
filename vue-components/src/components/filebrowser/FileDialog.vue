@@ -3,9 +3,27 @@ import DirBrowser from './DirBrowser.vue';
 export default {
   components: { DirBrowser },
   props: {
+    title: {
+      type: String,
+      default: 'File browser',
+    },
+    locations: {
+      type: String,
+      default: 'local', // local, remote, both, both-with-sync
+    },
+    gotoShortcuts: {
+      type: Array,
+      default: () => ['favorites', 'recents', 'locations'],
+    },
     mode: {
       type: String,
-      default: 'Save',
+      default: 'open', // open, save, ...
+    },
+    enableHistory: {
+      type: Boolean,
+    },
+    visible: {
+      type: Boolean,
     },
     dark: {
       type: Boolean,
@@ -42,7 +60,7 @@ export default {
     byteFormatter: {
       type: Function,
       required: false,
-      default: (bytes) => bytes + ' bytes',
+      default: (bytes) => bytes + ' B',
     },
     dateFormatter: {
       type: Function,
@@ -52,20 +70,44 @@ export default {
   },
   data() {
     return {
-      dialogOpen: false,
+      locationSelector: 0,
       syncCurrentLocalAndRemote: false,
-      unsyncedCurrentTab: 'local',
       filename: undefined,
       filetype: this.fileTypes[0]?.value,
       currentSelected: [],
     };
   },
+  computed: {
+    showLocationSelector() {
+      return this.locations.includes('both');
+    },
+    showSyncLocation() {
+      return this.locations.includes('-with-sync');
+    },
+    showLocal() {
+      if (this.showSyncLocation) {
+        return this.locationSelector === 0;
+      }
+      return this.locations === 'local';
+    },
+    showRemote() {
+      if (this.showSyncLocation) {
+        return this.locationSelector === 1;
+      }
+      return this.locations === 'remote';
+    },
+  },
   methods: {
     submit() {
       this.$emit('submit', {
-        mode: this.mode,
-        filename: this.filename + this.filetype,
+        currentSelected: this.currentSelected,
+        filename: this.filename,
+        filetype: this.filetype,
+        location: this.locations,
       });
+    },
+    close() {
+      this.$emit('close');
     },
     setCurrentDir({ locationType, dirName }) {
       if (locationType === 'Local') {
@@ -83,122 +125,88 @@ export default {
 
 <template>
   <div class="container">
-    <v-btn color="primary" @click="dialogOpen = true"> {{ mode }} </v-btn>
     <v-dialog
-      v-model="dialogOpen"
-      transition="dialog-bottom-transition"
-      max-width="800"
+      :value="visible"
+      transition="scroll-x-reverse-transition"
+      fullscreen
     >
-      <v-card>
-        <v-card-text class="text-h6 grey lighten-2">
-          {{ mode }}
-          <v-icon
-            @click="dialogOpen = false"
-            style="float: right; height: 30px"
-          >
-            mdi-close
-          </v-icon>
-        </v-card-text>
-        <v-divider></v-divider>
-
-        <v-btn
-          fab
-          small
-          class="sync-button"
-          :color="syncCurrentLocalAndRemote ? 'primary' : ''"
-          @click="syncCurrentLocalAndRemote = !syncCurrentLocalAndRemote"
+      <v-card class="fill-height" rounded="0">
+        <v-card-title
+          class="px-2 py-1 text-h6 grey darken-1 grey--text text--lighten-4"
+          dense
         >
-          <v-icon>mdi-folder-sync-outline</v-icon>
-        </v-btn>
-        <div v-if="!syncCurrentLocalAndRemote">
-          <v-tabs
-            grow
-            v-model="unsyncedCurrentTab"
-            active-class="highlighted-tab"
-          >
-            <v-tab>Local</v-tab>
-            <v-tab>Remote</v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="unsyncedCurrentTab">
-            <v-tab-item>
-              <dir-browser
-                @setCurrentDir="setCurrentDir"
-                @setCurrentSelected="setCurrentSelected"
-                @setFileName="(name) => (this.filename = name)"
-                locationType="Local"
-                :small="syncCurrentLocalAndRemote"
-                :directoryHierarchy="localHierarchy"
-                :currentDir="currentLocalDir"
-                :dirContents="currentLocalDirContents"
-                :byteFormatter="byteFormatter"
-                :dateFormatter="dateFormatter"
-              />
-            </v-tab-item>
-            <v-tab-item>
-              <dir-browser
-                @setCurrentDir="setCurrentDir"
-                @setCurrentSelected="setCurrentSelected"
-                @setFileName="(name) => (this.filename = name)"
-                locationType="Remote"
-                :small="syncCurrentLocalAndRemote"
-                :directoryHierarchy="remoteHierarchy"
-                :currentDir="currentRemoteDir"
-                :dirContents="currentRemoteDirContents"
-                :byteFormatter="byteFormatter"
-                :dateFormatter="dateFormatter"
-              />
-            </v-tab-item>
-          </v-tabs-items>
-        </div>
-        <div v-else class="sync-display">
-          <div>
-            <v-tabs grow>
-              <v-tab class="highlighted-tab">Local</v-tab>
-            </v-tabs>
-            <file-browser
-              @setCurrentDir="setCurrentDir"
-              @setCurrentSelected="setCurrentSelected"
-              @setFileName="(name) => (this.filename = name)"
-              locationType="Local"
-              :small="syncCurrentLocalAndRemote"
-              :directoryHierarchy="localHierarchy"
-              :currentDir="currentLocalDir"
-              :dirContents="currentLocalDirContents"
-              :byteFormatter="byteFormatter"
-              :dateFormatter="dateFormatter"
-            />
-          </div>
-          <div>
-            <v-tabs grow>
-              <v-tab class="highlighted-tab">Remote</v-tab>
-            </v-tabs>
-            <file-browser
-              @setCurrentDir="setCurrentDir"
-              @setCurrentSelected="setCurrentSelected"
-              @setFileName="(name) => (this.filename = name)"
-              locationType="Remote"
-              :small="syncCurrentLocalAndRemote"
-              :directoryHierarchy="remoteHierarchy"
-              :currentDir="currentRemoteDir"
-              :dirContents="currentRemoteDirContents"
-              :byteFormatter="byteFormatter"
-              :dateFormatter="dateFormatter"
-            />
-          </div>
-        </div>
-        <div class="pa-3 container">
+          {{ title }}
+          <v-spacer />
+          <v-icon color="grey lighten-4" @click="close">mdi-close</v-icon>
+        </v-card-title>
+
+        <v-card-text class="pa-0" style="height: calc(100% - 110px)">
           <v-btn
-            v-if="mode === 'Open'"
+            v-if="showSyncLocation"
+            fab
+            small
+            class="sync-button"
+            :color="syncCurrentLocalAndRemote ? 'primary' : ''"
+            @click="syncCurrentLocalAndRemote = !syncCurrentLocalAndRemote"
+          >
+            <v-icon>mdi-folder-sync-outline</v-icon>
+          </v-btn>
+          <div v-if="showLocationSelector && !syncCurrentLocalAndRemote">
+            <v-tabs
+              grow
+              v-model="locationSelector"
+              active-class="highlighted-tab"
+            >
+              <v-tab>Local</v-tab>
+              <v-tab>Remote</v-tab>
+            </v-tabs>
+          </div>
+
+          <dir-browser
+            v-if="showLocal"
+            @setCurrentDir="setCurrentDir"
+            @setCurrentSelected="setCurrentSelected"
+            @setFileName="filename = $event"
+            @goto="$emit('goto', $event)"
+            :gotoShortcuts="gotoShortcuts"
+            :enableHistory="enableHistory"
+            locationType="Local"
+            :small="syncCurrentLocalAndRemote"
+            :directoryHierarchy="localHierarchy"
+            :currentDir="currentLocalDir"
+            :dirContents="currentLocalDirContents"
+            :byteFormatter="byteFormatter"
+            :dateFormatter="dateFormatter"
+            :canCreateDirectory="mode === 'save'"
+          />
+          <dir-browser
+            v-if="showRemote"
+            @setCurrentDir="setCurrentDir"
+            @setCurrentSelected="setCurrentSelected"
+            @setFileName="filename = $event"
+            @goto="$emit('goto', $event)"
+            :gotoShortcuts="gotoShortcuts"
+            :enableHistory="enableHistory"
+            locationType="Remote"
+            :small="syncCurrentLocalAndRemote"
+            :directoryHierarchy="remoteHierarchy"
+            :currentDir="currentRemoteDir"
+            :dirContents="currentRemoteDirContents"
+            :byteFormatter="byteFormatter"
+            :dateFormatter="dateFormatter"
+            :canCreateDirectory="mode === 'save'"
+          />
+        </v-card-text>
+        <v-row class="pa-3 mx-0 my-2">
+          <v-btn
+            v-if="mode === 'open'"
+            color="grey darken-1 grey--text text--lighten-3"
             :disabled="currentSelected.length < 1"
             @click="submit"
           >
-            {{
-              currentSelected.length > 1
-                ? 'Open multiple as time series'
-                : 'Open'
-            }}
+            {{ currentSelected.length > 1 ? 'Open group' : 'Open' }}
           </v-btn>
-          <div v-if="mode === 'Save'" class="container">
+          <div v-if="mode === 'save'">
             <v-text-field
               v-model="filename"
               autofocus
@@ -211,11 +219,17 @@ export default {
               class="dir-select"
               solo
             />
-            <v-btn :disabled="!(filename && filetype)" @click="submit">
-              {{ mode }}
+            <v-btn
+              :disabled="!(filename && filetype)"
+              @click="submit"
+              color="grey darken-1 grey--text text--lighten-3"
+            >
+              Save
             </v-btn>
           </div>
-        </div>
+          <v-spacer />
+          <v-btn outlined @click="close">Cancel</v-btn>
+        </v-row>
       </v-card>
     </v-dialog>
   </div>

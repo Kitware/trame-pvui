@@ -88,7 +88,9 @@ class InfoPanel(HtmlElement):
             ("byte_formatter", "byteFormatter"),
             ("integer_formatter", "integerFormatter"),
             ("float_formatter", "floatFormatter"),
+            ("visible_content", "visibleContent"),
         ]
         self._event_names += [
             ("set_selected_node", "setSelectedNode"),
+            ("toggle_visible_content", "toggleVisibleContent"),
         ]
